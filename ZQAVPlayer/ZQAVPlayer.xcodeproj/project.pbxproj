@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		623AC073207D2A0B0057DA10 /* help.zip in Resources */ = {isa = PBXBuildFile; fileRef = 623AC072207D2A0B0057DA10 /* help.zip */; };
 		6284A52A207D150E007D62B6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A529207D150E007D62B6 /* AppDelegate.m */; };
 		6284A52D207D150E007D62B6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A52C207D150E007D62B6 /* ViewController.m */; };
 		6284A532207D150F007D62B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6284A531207D150F007D62B6 /* Assets.xcassets */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		623AC072207D2A0B0057DA10 /* help.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = help.zip; sourceTree = "<group>"; };
 		6284A525207D150E007D62B6 /* ZQAVPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZQAVPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6284A528207D150E007D62B6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6284A529207D150E007D62B6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -123,6 +125,14 @@
 			path = ViewModel;
 			sourceTree = "<group>";
 		};
+		623AC06E207D205A0057DA10 /* Help */ = {
+			isa = PBXGroup;
+			children = (
+				623AC072207D2A0B0057DA10 /* help.zip */,
+			);
+			path = Help;
+			sourceTree = "<group>";
+		};
 		6284A51C207D150E007D62B6 = {
 			isa = PBXGroup;
 			children = (
@@ -147,6 +157,7 @@
 		6284A527207D150E007D62B6 /* ZQAVPlayer */ = {
 			isa = PBXGroup;
 			children = (
+				623AC06E207D205A0057DA10 /* Help */,
 				623AC069207D1F5D0057DA10 /* Class */,
 				6284A562207D1F10007D62B6 /* Support */,
 				6284A560207D1EBE007D62B6 /* AppDelegate */,
@@ -302,6 +313,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				623AC073207D2A0B0057DA10 /* help.zip in Resources */,
 				6284A532207D150F007D62B6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
