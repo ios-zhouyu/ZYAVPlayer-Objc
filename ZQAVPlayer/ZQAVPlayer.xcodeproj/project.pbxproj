@@ -80,6 +80,49 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		623AC069207D1F5D0057DA10 /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				623AC06D207D1F890057DA10 /* ViewModel */,
+				623AC06C207D1F800057DA10 /* Model */,
+				623AC06B207D1F790057DA10 /* View */,
+				623AC06A207D1F700057DA10 /* Controller */,
+			);
+			path = Class;
+			sourceTree = "<group>";
+		};
+		623AC06A207D1F700057DA10 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				6284A52B207D150E007D62B6 /* ViewController.h */,
+				6284A52C207D150E007D62B6 /* ViewController.m */,
+				6284A55D207D1C21007D62B6 /* ZYPlayerManager.h */,
+				6284A55E207D1C21007D62B6 /* ZYPlayerManager.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		623AC06B207D1F790057DA10 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		623AC06C207D1F800057DA10 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		623AC06D207D1F890057DA10 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		6284A51C207D150E007D62B6 = {
 			isa = PBXGroup;
 			children = (
@@ -104,15 +147,9 @@
 		6284A527207D150E007D62B6 /* ZQAVPlayer */ = {
 			isa = PBXGroup;
 			children = (
-				6284A528207D150E007D62B6 /* AppDelegate.h */,
-				6284A529207D150E007D62B6 /* AppDelegate.m */,
-				6284A52B207D150E007D62B6 /* ViewController.h */,
-				6284A52C207D150E007D62B6 /* ViewController.m */,
-				6284A55D207D1C21007D62B6 /* ZYPlayerManager.h */,
-				6284A55E207D1C21007D62B6 /* ZYPlayerManager.m */,
-				6284A531207D150F007D62B6 /* Assets.xcassets */,
-				6284A536207D150F007D62B6 /* Info.plist */,
-				6284A537207D150F007D62B6 /* main.m */,
+				623AC069207D1F5D0057DA10 /* Class */,
+				6284A562207D1F10007D62B6 /* Support */,
+				6284A560207D1EBE007D62B6 /* AppDelegate */,
 			);
 			path = ZQAVPlayer;
 			sourceTree = "<group>";
@@ -141,6 +178,25 @@
 				6284A55B207D1628007D62B6 /* AVFoundation.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		6284A560207D1EBE007D62B6 /* AppDelegate */ = {
+			isa = PBXGroup;
+			children = (
+				6284A528207D150E007D62B6 /* AppDelegate.h */,
+				6284A529207D150E007D62B6 /* AppDelegate.m */,
+			);
+			path = AppDelegate;
+			sourceTree = "<group>";
+		};
+		6284A562207D1F10007D62B6 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				6284A531207D150F007D62B6 /* Assets.xcassets */,
+				6284A536207D150F007D62B6 /* Info.plist */,
+				6284A537207D150F007D62B6 /* main.m */,
+			);
+			name = Support;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
