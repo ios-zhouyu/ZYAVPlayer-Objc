@@ -40,6 +40,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
 @property (nonatomic, strong) UISlider *progressSlider;//进度条
 @property (nonatomic, strong) UIView *progressSliderBackView;//进度条背景框
 @property (nonatomic, strong) UIView *progressSliderBufferView;//缓冲进度条
+@property (nonatomic, assign, getter=isSliderDragging) BOOL sliderDragging;
 
 @property (nonatomic, strong) AVPlayer *player;//播放器
 @property (nonatomic, strong) AVPlayerItem *playerItem;//播放单元
@@ -62,6 +63,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         _timerInterval = 10.0;
         _playStatus = ZYAVPlayerPlayStatusUnknown;
         _currentTimeNum = 0;
+        _sliderDragging = NO;
         
         self.backgroundColor = [UIColor blackColor];
         self.touchedHidenSubviews = NO;
@@ -196,21 +198,18 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         self.totalTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)totalMinute,(int)totalSecond];
         self.progressSlider.maximumValue = floor(totalTimeSecond);
         
-        //获取当前时长
-        __weak typeof(self) weakSelf = self;
-        self.playerTimeObserve = [self.player addPeriodicTimeObserverForInterval:CMTimeMake(1.0, 1.0) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
-            double currentTimeSecond  = CMTimeGetSeconds(time);
-            weakSelf.currentTimeNum = (NSInteger)currentTimeSecond;
-            if (currentTimeSecond) {
-                NSInteger currentMinute =  currentTimeSecond / 60;
-                NSInteger currentSecond =  (int)currentTimeSecond % 60;
-                weakSelf.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)currentMinute,(int)currentSecond];
-                weakSelf.progressSlider.value = currentTimeSecond;
-                if (floor(currentTimeSecond) == floor(totalTimeSecond)) {
-                    weakSelf.playStatus = ZYAVPlayerPlayStatusEnd;
-                }
+        //拖拽时不再监听进度,停止改变slide的值,由拖拽手势控制
+        if (self.isSliderDragging) {
+            if (self.playerTimeObserve) {
+                [self.player removeTimeObserver:self.playerTimeObserve];
+                self.playerTimeObserve = nil;
             }
-        }];
+            return;
+        };
+        
+        //获取当前时长
+        [self setplayerTimeObserveWithTotalTimeSecond:totalTimeSecond];
+
     } else if (self.playerItem.status == AVPlayerItemStatusFailed) {//播放失败
         self.playStatus = ZYAVPlayerPlayStatusFailed;
         [self.player pause];
@@ -218,6 +217,24 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         self.playStatus = ZYAVPlayerPlayStatusUnknown;
         [self.player pause];
     }
+}
+
+//获取当前时长
+- (void)setplayerTimeObserveWithTotalTimeSecond:(double)totalTimeSecond {
+    __weak typeof(self) weakSelf = self;
+    self.playerTimeObserve = [self.player addPeriodicTimeObserverForInterval:CMTimeMake(1.0, 1.0) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
+        double currentTimeSecond  = CMTimeGetSeconds(time);
+        weakSelf.currentTimeNum = (NSInteger)currentTimeSecond;
+        if (currentTimeSecond) {
+            NSInteger currentMinute =  currentTimeSecond / 60;
+            NSInteger currentSecond =  (int)currentTimeSecond % 60;
+            weakSelf.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)currentMinute,(int)currentSecond];
+            weakSelf.progressSlider.value = currentTimeSecond;
+            if (floor(currentTimeSecond) == floor(totalTimeSecond)) {
+                weakSelf.playStatus = ZYAVPlayerPlayStatusEnd;
+            }
+        }
+    }];
 }
 
 #pragma mark - dealloc
@@ -239,11 +256,44 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
 }
 
 #pragma mark - event
-- (void)progressSliderValueChenged:(UISlider *)slider {
-    NSInteger currentMinute =  slider.value / 60;
-    NSInteger currentSecond =  (int)slider.value % 60;
-    self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)currentMinute,(int)currentSecond];
-    [self.player seekToTime:CMTimeMake(slider.value, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+- (void)slideValueChanged:(UIPanGestureRecognizer *)panGesture {
+    CGFloat totalTimeSecond = self.urlAsset.duration.value / self.urlAsset.duration.timescale;
+    CGPoint sliderPoint = [panGesture locationInView:self.progressSlider];
+    CGFloat sliderWidth = CGRectGetWidth(self.progressSlider.bounds);
+    
+    if (sliderPoint.x < 0 || sliderPoint.x > sliderWidth) {
+        return;
+    }
+    
+    //当前滑动距离换算成对应的秒数
+     CGFloat slideValue = sliderPoint.x / sliderWidth * totalTimeSecond;
+    
+    NSInteger currentMinute =  slideValue / 60;
+    NSInteger currentSecond =  (int)slideValue % 60;
+    
+    if (panGesture.state == UIGestureRecognizerStatePossible) {
+        self.sliderDragging = NO;
+    } else if (panGesture.state == UIGestureRecognizerStateBegan) {//拖拽开始时,取消监听播放进度对slider的值得修改,由拖拽手势来修改
+        self.sliderDragging = YES;
+        if (self.playerTimeObserve) {
+            [self.player removeTimeObserver:self.playerTimeObserve];
+            self.playerTimeObserve = nil;
+        }
+    } else if (panGesture.state == UIGestureRecognizerStateChanged) {//拖拽时只修改显示的时间和滑动值,不触发对应播放,维持原有播放
+        self.sliderDragging = YES;
+        self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)currentMinute,(int)currentSecond];
+        self.progressSlider.value = slideValue;
+    } else if (panGesture.state == UIGestureRecognizerStateEnded) {//拖拽结束再播放
+        self.sliderDragging = NO;
+        [self.player seekToTime:CMTimeMake(slideValue, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+        [self setplayerTimeObserveWithTotalTimeSecond:totalTimeSecond];
+    } else if (panGesture.state == UIGestureRecognizerStateCancelled) {
+        self.sliderDragging = NO;
+    } else if (panGesture.state == UIGestureRecognizerStateFailed) {
+        self.sliderDragging = NO;
+    } else if (panGesture.state == UIGestureRecognizerStateRecognized) {
+        self.sliderDragging = NO;
+    }
 }
 - (void)backButtonClick:(UIButton *)button {//返回
     
@@ -401,7 +451,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         _progressSlider.maximumTrackTintColor = [UIColor clearColor];
         [_progressSlider setThumbImage:[UIImage imageNamed:@"ZFPlayer.bundle/ZFPlayer_slider"] forState:UIControlStateNormal];
         [_progressSlider setThumbImage:[UIImage imageNamed:@"ZFPlayer.bundle/ZFPlayer_slider"] forState:UIControlStateHighlighted];
-         [_progressSlider addTarget:self action:@selector(progressSliderValueChenged:) forControlEvents:UIControlEventValueChanged];
+        [_progressSlider addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(slideValueChanged:)]];
     }
     return _progressSlider;
 }
