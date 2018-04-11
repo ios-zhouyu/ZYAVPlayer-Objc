@@ -198,15 +198,6 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         self.totalTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)totalMinute,(int)totalSecond];
         self.progressSlider.maximumValue = floor(totalTimeSecond);
         
-        //拖拽时不再监听进度,停止改变slide的值,由拖拽手势控制
-        if (self.isSliderDragging) {
-            if (self.playerTimeObserve) {
-                [self.player removeTimeObserver:self.playerTimeObserve];
-                self.playerTimeObserve = nil;
-            }
-            return;
-        };
-        
         //获取当前时长
         [self setplayerTimeObserveWithTotalTimeSecond:totalTimeSecond];
 
@@ -260,7 +251,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     CGFloat totalTimeSecond = self.urlAsset.duration.value / self.urlAsset.duration.timescale;
     CGPoint sliderPoint = [panGesture locationInView:self.progressSlider];
     CGFloat sliderWidth = CGRectGetWidth(self.progressSlider.bounds);
-    
+    NSLog(@"%f",sliderPoint.x);
     if (sliderPoint.x < 0 || sliderPoint.x > sliderWidth) {
         return;
     }
@@ -273,20 +264,18 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     
     if (panGesture.state == UIGestureRecognizerStatePossible) {
         self.sliderDragging = NO;
-    } else if (panGesture.state == UIGestureRecognizerStateBegan) {//拖拽开始时,取消监听播放进度对slider的值得修改,由拖拽手势来修改
+    } else if (panGesture.state == UIGestureRecognizerStateBegan) {//拖拽开始时,取消监听播放状态对slider的值得修改,由拖拽手势来修改
         self.sliderDragging = YES;
-        if (self.playerTimeObserve) {
-            [self.player removeTimeObserver:self.playerTimeObserve];
-            self.playerTimeObserve = nil;
-        }
+        [self.playerItem removeObserver:self forKeyPath:ZYAVPlayerStatus];
     } else if (panGesture.state == UIGestureRecognizerStateChanged) {//拖拽时只修改显示的时间和滑动值,不触发对应播放,维持原有播放
         self.sliderDragging = YES;
         self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)currentMinute,(int)currentSecond];
         self.progressSlider.value = slideValue;
-    } else if (panGesture.state == UIGestureRecognizerStateEnded) {//拖拽结束再播放
+    } else if (panGesture.state == UIGestureRecognizerStateEnded) {//拖拽结束再播放,在监听播放状态
         self.sliderDragging = NO;
         [self.player seekToTime:CMTimeMake(slideValue, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
-        [self setplayerTimeObserveWithTotalTimeSecond:totalTimeSecond];
+        // 监听播放状态
+        [self.playerItem addObserver:self forKeyPath:ZYAVPlayerStatus options:NSKeyValueObservingOptionNew context:nil];
     } else if (panGesture.state == UIGestureRecognizerStateCancelled) {
         self.sliderDragging = NO;
     } else if (panGesture.state == UIGestureRecognizerStateFailed) {
