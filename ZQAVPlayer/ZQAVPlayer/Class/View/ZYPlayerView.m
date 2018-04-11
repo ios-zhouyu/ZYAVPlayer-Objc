@@ -274,7 +274,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     } else if (panGesture.state == UIGestureRecognizerStateEnded) {//拖拽结束再播放,在监听播放状态
         self.sliderDragging = NO;
         [self.player seekToTime:CMTimeMake(slideValue, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
-        // 监听播放状态
+        // 监听播放状态--slider控件有问题?
         [self.playerItem addObserver:self forKeyPath:ZYAVPlayerStatus options:NSKeyValueObservingOptionNew context:nil];
     } else if (panGesture.state == UIGestureRecognizerStateCancelled) {
         self.sliderDragging = NO;
