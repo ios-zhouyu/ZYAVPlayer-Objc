@@ -1,0 +1,23 @@
+PODS:
+  - Masonry (1.1.0)
+  - Reachability (3.2)
+  - SDWebImage (4.3.3):
+    - SDWebImage/Core (= 4.3.3)
+  - SDWebImage/Core (4.3.3)
+  - YYModel (1.0.4)
+
+DEPENDENCIES:
+  - Masonry
+  - Reachability
+  - SDWebImage
+  - YYModel
+
+SPEC CHECKSUMS:
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
+  YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
+
+PODFILE CHECKSUM: 8ce73453209f834ccaccf2d7a532c87b066573c7
+
+COCOAPODS: 1.4.0

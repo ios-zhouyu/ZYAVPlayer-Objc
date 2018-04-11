@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		623AC073207D2A0B0057DA10 /* help.zip in Resources */ = {isa = PBXBuildFile; fileRef = 623AC072207D2A0B0057DA10 /* help.zip */; };
+		62510A48207DB6860009CE2B /* ZFPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 62510A47207DB6860009CE2B /* ZFPlayer.bundle */; };
+		62510A57207DBCEE0009CE2B /* ZYPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 62510A55207DBCEE0009CE2B /* ZYPlayerView.m */; };
 		6284A52A207D150E007D62B6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A529207D150E007D62B6 /* AppDelegate.m */; };
 		6284A52D207D150E007D62B6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A52C207D150E007D62B6 /* ViewController.m */; };
 		6284A532207D150F007D62B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6284A531207D150F007D62B6 /* Assets.xcassets */; };
@@ -16,6 +17,9 @@
 		6284A54D207D150F007D62B6 /* ZQAVPlayerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A54C207D150F007D62B6 /* ZQAVPlayerUITests.m */; };
 		6284A55C207D1628007D62B6 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6284A55B207D1628007D62B6 /* AVFoundation.framework */; };
 		6284A55F207D1C21007D62B6 /* ZYPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A55E207D1C21007D62B6 /* ZYPlayerManager.m */; };
+		676BF49CAF2DBC659A5159D7 /* libPods-ZQAVPlayerUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A70B96930472F1189DE70FCD /* libPods-ZQAVPlayerUITests.a */; };
+		865D9E955DA2050DC25A6112 /* libPods-ZQAVPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE008F0A871FE96C3D1762D0 /* libPods-ZQAVPlayer.a */; };
+		FDAA3D54970561A2DE30BEEF /* libPods-ZQAVPlayerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC22991BFCD97BC6B6ACAE69 /* libPods-ZQAVPlayerTests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,7 +40,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		623AC072207D2A0B0057DA10 /* help.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = help.zip; sourceTree = "<group>"; };
+		53C3BA553297EA78027A8F4D /* Pods-ZQAVPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZQAVPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZQAVPlayer/Pods-ZQAVPlayer.release.xcconfig"; sourceTree = "<group>"; };
+		62510A47207DB6860009CE2B /* ZFPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZFPlayer.bundle; sourceTree = "<group>"; };
+		62510A54207DBCEE0009CE2B /* ZYPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYPlayerView.h; sourceTree = "<group>"; };
+		62510A55207DBCEE0009CE2B /* ZYPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYPlayerView.m; sourceTree = "<group>"; };
+		62510A58207DBDE90009CE2B /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		62510A59207E4A560009CE2B /* help.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = help.zip; sourceTree = "<group>"; };
 		6284A525207D150E007D62B6 /* ZQAVPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZQAVPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6284A528207D150E007D62B6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6284A529207D150E007D62B6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -54,6 +63,14 @@
 		6284A55B207D1628007D62B6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		6284A55D207D1C21007D62B6 /* ZYPlayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZYPlayerManager.h; sourceTree = "<group>"; };
 		6284A55E207D1C21007D62B6 /* ZYPlayerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZYPlayerManager.m; sourceTree = "<group>"; };
+		7386A343F26913CBA21AEC84 /* Pods-ZQAVPlayerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZQAVPlayerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZQAVPlayerTests/Pods-ZQAVPlayerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		98069F10D73E1095CEA12FE3 /* Pods-ZQAVPlayerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZQAVPlayerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZQAVPlayerTests/Pods-ZQAVPlayerTests.release.xcconfig"; sourceTree = "<group>"; };
+		A2B8DEE391C954EC5AF4DA99 /* Pods-ZQAVPlayerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZQAVPlayerUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZQAVPlayerUITests/Pods-ZQAVPlayerUITests.release.xcconfig"; sourceTree = "<group>"; };
+		A70B96930472F1189DE70FCD /* libPods-ZQAVPlayerUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ZQAVPlayerUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFB655EA5FD379638F314E1B /* Pods-ZQAVPlayer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZQAVPlayer.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZQAVPlayer/Pods-ZQAVPlayer.debug.xcconfig"; sourceTree = "<group>"; };
+		BBCB9C2425E8ACD9ECFA25C2 /* Pods-ZQAVPlayerUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZQAVPlayerUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZQAVPlayerUITests/Pods-ZQAVPlayerUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		BC22991BFCD97BC6B6ACAE69 /* libPods-ZQAVPlayerTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ZQAVPlayerTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		DE008F0A871FE96C3D1762D0 /* libPods-ZQAVPlayer.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ZQAVPlayer.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +79,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6284A55C207D1628007D62B6 /* AVFoundation.framework in Frameworks */,
+				865D9E955DA2050DC25A6112 /* libPods-ZQAVPlayer.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,6 +87,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FDAA3D54970561A2DE30BEEF /* libPods-ZQAVPlayerTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,18 +95,32 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				676BF49CAF2DBC659A5159D7 /* libPods-ZQAVPlayerUITests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5A769E213E719694FDB51FE0 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AFB655EA5FD379638F314E1B /* Pods-ZQAVPlayer.debug.xcconfig */,
+				53C3BA553297EA78027A8F4D /* Pods-ZQAVPlayer.release.xcconfig */,
+				7386A343F26913CBA21AEC84 /* Pods-ZQAVPlayerTests.debug.xcconfig */,
+				98069F10D73E1095CEA12FE3 /* Pods-ZQAVPlayerTests.release.xcconfig */,
+				BBCB9C2425E8ACD9ECFA25C2 /* Pods-ZQAVPlayerUITests.debug.xcconfig */,
+				A2B8DEE391C954EC5AF4DA99 /* Pods-ZQAVPlayerUITests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		623AC069207D1F5D0057DA10 /* Class */ = {
 			isa = PBXGroup;
 			children = (
-				623AC06D207D1F890057DA10 /* ViewModel */,
-				623AC06C207D1F800057DA10 /* Model */,
-				623AC06B207D1F790057DA10 /* View */,
+				62510A52207DBCEE0009CE2B /* Model */,
+				62510A53207DBCEE0009CE2B /* View */,
+				62510A56207DBCEE0009CE2B /* ViewModel */,
 				623AC06A207D1F700057DA10 /* Controller */,
 			);
 			path = Class;
@@ -104,33 +137,36 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
-		623AC06B207D1F790057DA10 /* View */ = {
+		623AC06E207D205A0057DA10 /* Help */ = {
 			isa = PBXGroup;
 			children = (
+				62510A59207E4A560009CE2B /* help.zip */,
+				62510A47207DB6860009CE2B /* ZFPlayer.bundle */,
 			);
-			path = View;
+			path = Help;
 			sourceTree = "<group>";
 		};
-		623AC06C207D1F800057DA10 /* Model */ = {
+		62510A52207DBCEE0009CE2B /* Model */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			path = Model;
 			sourceTree = "<group>";
 		};
-		623AC06D207D1F890057DA10 /* ViewModel */ = {
+		62510A53207DBCEE0009CE2B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				62510A54207DBCEE0009CE2B /* ZYPlayerView.h */,
+				62510A55207DBCEE0009CE2B /* ZYPlayerView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		62510A56207DBCEE0009CE2B /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
 			);
 			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		623AC06E207D205A0057DA10 /* Help */ = {
-			isa = PBXGroup;
-			children = (
-				623AC072207D2A0B0057DA10 /* help.zip */,
-			);
-			path = Help;
 			sourceTree = "<group>";
 		};
 		6284A51C207D150E007D62B6 = {
@@ -141,6 +177,7 @@
 				6284A54B207D150F007D62B6 /* ZQAVPlayerUITests */,
 				6284A526207D150E007D62B6 /* Products */,
 				6284A55A207D1628007D62B6 /* Frameworks */,
+				5A769E213E719694FDB51FE0 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -187,6 +224,9 @@
 			isa = PBXGroup;
 			children = (
 				6284A55B207D1628007D62B6 /* AVFoundation.framework */,
+				DE008F0A871FE96C3D1762D0 /* libPods-ZQAVPlayer.a */,
+				BC22991BFCD97BC6B6ACAE69 /* libPods-ZQAVPlayerTests.a */,
+				A70B96930472F1189DE70FCD /* libPods-ZQAVPlayerUITests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -206,6 +246,7 @@
 				6284A531207D150F007D62B6 /* Assets.xcassets */,
 				6284A536207D150F007D62B6 /* Info.plist */,
 				6284A537207D150F007D62B6 /* main.m */,
+				62510A58207DBDE90009CE2B /* PrefixHeader.pch */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -217,9 +258,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6284A551207D150F007D62B6 /* Build configuration list for PBXNativeTarget "ZQAVPlayer" */;
 			buildPhases = (
+				12059DBB2D23A1ADB297F45E /* [CP] Check Pods Manifest.lock */,
 				6284A521207D150E007D62B6 /* Sources */,
 				6284A522207D150E007D62B6 /* Frameworks */,
 				6284A523207D150E007D62B6 /* Resources */,
+				1C4B00AFAC15FA8449D2D385 /* [CP] Embed Pods Frameworks */,
+				702405EF0AD0430C4FFBD661 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -234,9 +278,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6284A554207D150F007D62B6 /* Build configuration list for PBXNativeTarget "ZQAVPlayerTests" */;
 			buildPhases = (
+				18C60E8E99E13EAD045989F2 /* [CP] Check Pods Manifest.lock */,
 				6284A539207D150F007D62B6 /* Sources */,
 				6284A53A207D150F007D62B6 /* Frameworks */,
 				6284A53B207D150F007D62B6 /* Resources */,
+				388A200AFEAD72E7225A6321 /* [CP] Embed Pods Frameworks */,
+				298585AB567642815D86472C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -252,9 +299,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6284A557207D150F007D62B6 /* Build configuration list for PBXNativeTarget "ZQAVPlayerUITests" */;
 			buildPhases = (
+				D790D6E20C25D024F3C55F1A /* [CP] Check Pods Manifest.lock */,
 				6284A544207D150F007D62B6 /* Sources */,
 				6284A545207D150F007D62B6 /* Frameworks */,
 				6284A546207D150F007D62B6 /* Resources */,
+				50661A1AD6CDBAB11EA3289E /* [CP] Embed Pods Frameworks */,
+				A44759C2141F43B076B58EAA /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -313,7 +363,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				623AC073207D2A0B0057DA10 /* help.zip in Resources */,
+				62510A48207DB6860009CE2B /* ZFPlayer.bundle in Resources */,
 				6284A532207D150F007D62B6 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -334,11 +384,159 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		12059DBB2D23A1ADB297F45E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ZQAVPlayer-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		18C60E8E99E13EAD045989F2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ZQAVPlayerTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1C4B00AFAC15FA8449D2D385 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZQAVPlayer/Pods-ZQAVPlayer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		298585AB567642815D86472C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZQAVPlayerTests/Pods-ZQAVPlayerTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		388A200AFEAD72E7225A6321 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZQAVPlayerTests/Pods-ZQAVPlayerTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		50661A1AD6CDBAB11EA3289E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZQAVPlayerUITests/Pods-ZQAVPlayerUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		702405EF0AD0430C4FFBD661 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZQAVPlayer/Pods-ZQAVPlayer-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A44759C2141F43B076B58EAA /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZQAVPlayerUITests/Pods-ZQAVPlayerUITests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D790D6E20C25D024F3C55F1A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ZQAVPlayerUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		6284A521207D150E007D62B6 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				62510A57207DBCEE0009CE2B /* ZYPlayerView.m in Sources */,
 				6284A52D207D150E007D62B6 /* ViewController.m in Sources */,
 				6284A538207D150F007D62B6 /* main.m in Sources */,
 				6284A52A207D150E007D62B6 /* AppDelegate.m in Sources */,
@@ -490,10 +688,12 @@
 		};
 		6284A552207D150F007D62B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AFB655EA5FD379638F314E1B /* Pods-ZQAVPlayer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WRNUC3KJ6A;
+				GCC_PREFIX_HEADER = ./ZQAVPlayer/PrefixHeader.pch;
 				INFOPLIST_FILE = ZQAVPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -508,10 +708,12 @@
 		};
 		6284A553207D150F007D62B6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 53C3BA553297EA78027A8F4D /* Pods-ZQAVPlayer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WRNUC3KJ6A;
+				GCC_PREFIX_HEADER = ./ZQAVPlayer/PrefixHeader.pch;
 				INFOPLIST_FILE = ZQAVPlayer/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -526,6 +728,7 @@
 		};
 		6284A555207D150F007D62B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7386A343F26913CBA21AEC84 /* Pods-ZQAVPlayerTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -545,6 +748,7 @@
 		};
 		6284A556207D150F007D62B6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 98069F10D73E1095CEA12FE3 /* Pods-ZQAVPlayerTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
@@ -564,6 +768,7 @@
 		};
 		6284A558207D150F007D62B6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BBCB9C2425E8ACD9ECFA25C2 /* Pods-ZQAVPlayerUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WRNUC3KJ6A;
@@ -582,6 +787,7 @@
 		};
 		6284A559207D150F007D62B6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A2B8DEE391C954EC5AF4DA99 /* Pods-ZQAVPlayerUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WRNUC3KJ6A;

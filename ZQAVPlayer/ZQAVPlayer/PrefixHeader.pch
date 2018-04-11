@@ -1,0 +1,30 @@
+//
+//  PrefixHeader.pch
+//  ZQAVPlayer
+//
+//  Created by zhouyu on 11/04/2018.
+//  Copyright © 2018 zhouyu. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+# ifdef __OBJC__
+
+#import "Masonry.h"
+#import "Reachability.h"
+#import "YYModel.h"
+#import "UIImageView+WebCache.h"
+
+#import "ZYPlayerView.h"
+
+// 自定义输入日志 Log
+#ifdef  DEBUG // 如果当前是开发 调试阶段可以用ZYLog输入
+#define ZYLog(...) NSLog(__VA_ARGS__)
+#else // 发布后就不能输入了
+#define ZYLog(...)
+#endif
+
+#endif
+
+#endif /* PrefixHeader_pch */

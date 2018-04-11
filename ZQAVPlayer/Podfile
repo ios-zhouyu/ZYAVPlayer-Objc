@@ -1,0 +1,21 @@
+platform :ios, '8.0'
+
+target 'ZQAVPlayer' do
+
+  pod 'Masonry'
+  pod 'YYModel'
+  pod 'SDWebImage'
+  pod 'Reachability'
+
+
+  target 'ZQAVPlayerTests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+  target 'ZQAVPlayerUITests' do
+    inherit! :search_paths
+    # Pods for testing
+  end
+
+end
