@@ -8,9 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		62510A48207DB6860009CE2B /* ZFPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 62510A47207DB6860009CE2B /* ZFPlayer.bundle */; };
-		62510A57207DBCEE0009CE2B /* ZYPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 62510A55207DBCEE0009CE2B /* ZYPlayerView.m */; };
+		6279DE75207F458100F80FD9 /* ZYPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6279DE72207F458000F80FD9 /* ZYPlayerView.m */; };
+		6279DE76207F458100F80FD9 /* ZYSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6279DE73207F458000F80FD9 /* ZYSliderView.m */; };
+		6279DE79207F459B00F80FD9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6279DE78207F459A00F80FD9 /* ViewController.m */; };
 		6284A52A207D150E007D62B6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A529207D150E007D62B6 /* AppDelegate.m */; };
-		6284A52D207D150E007D62B6 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A52C207D150E007D62B6 /* ViewController.m */; };
 		6284A532207D150F007D62B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6284A531207D150F007D62B6 /* Assets.xcassets */; };
 		6284A538207D150F007D62B6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A537207D150F007D62B6 /* main.m */; };
 		6284A542207D150F007D62B6 /* ZQAVPlayerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A541207D150F007D62B6 /* ZQAVPlayerTests.m */; };
@@ -42,15 +43,17 @@
 /* Begin PBXFileReference section */
 		53C3BA553297EA78027A8F4D /* Pods-ZQAVPlayer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZQAVPlayer.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZQAVPlayer/Pods-ZQAVPlayer.release.xcconfig"; sourceTree = "<group>"; };
 		62510A47207DB6860009CE2B /* ZFPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZFPlayer.bundle; sourceTree = "<group>"; };
-		62510A54207DBCEE0009CE2B /* ZYPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYPlayerView.h; sourceTree = "<group>"; };
-		62510A55207DBCEE0009CE2B /* ZYPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYPlayerView.m; sourceTree = "<group>"; };
 		62510A58207DBDE90009CE2B /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		62510A59207E4A560009CE2B /* help.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = help.zip; sourceTree = "<group>"; };
+		6279DE71207F458000F80FD9 /* ZYPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYPlayerView.h; sourceTree = "<group>"; };
+		6279DE72207F458000F80FD9 /* ZYPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYPlayerView.m; sourceTree = "<group>"; };
+		6279DE73207F458000F80FD9 /* ZYSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYSliderView.m; sourceTree = "<group>"; };
+		6279DE74207F458100F80FD9 /* ZYSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYSliderView.h; sourceTree = "<group>"; };
+		6279DE77207F459A00F80FD9 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		6279DE78207F459A00F80FD9 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		6284A525207D150E007D62B6 /* ZQAVPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZQAVPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6284A528207D150E007D62B6 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6284A529207D150E007D62B6 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		6284A52B207D150E007D62B6 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		6284A52C207D150E007D62B6 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		6284A531207D150F007D62B6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6284A536207D150F007D62B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6284A537207D150F007D62B6 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -129,8 +132,8 @@
 		623AC06A207D1F700057DA10 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				6284A52B207D150E007D62B6 /* ViewController.h */,
-				6284A52C207D150E007D62B6 /* ViewController.m */,
+				6279DE77207F459A00F80FD9 /* ViewController.h */,
+				6279DE78207F459A00F80FD9 /* ViewController.m */,
 				6284A55D207D1C21007D62B6 /* ZYPlayerManager.h */,
 				6284A55E207D1C21007D62B6 /* ZYPlayerManager.m */,
 			);
@@ -156,8 +159,10 @@
 		62510A53207DBCEE0009CE2B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				62510A54207DBCEE0009CE2B /* ZYPlayerView.h */,
-				62510A55207DBCEE0009CE2B /* ZYPlayerView.m */,
+				6279DE71207F458000F80FD9 /* ZYPlayerView.h */,
+				6279DE72207F458000F80FD9 /* ZYPlayerView.m */,
+				6279DE74207F458100F80FD9 /* ZYSliderView.h */,
+				6279DE73207F458000F80FD9 /* ZYSliderView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -536,10 +541,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				62510A57207DBCEE0009CE2B /* ZYPlayerView.m in Sources */,
-				6284A52D207D150E007D62B6 /* ViewController.m in Sources */,
+				6279DE79207F459B00F80FD9 /* ViewController.m in Sources */,
+				6279DE75207F458100F80FD9 /* ZYPlayerView.m in Sources */,
 				6284A538207D150F007D62B6 /* main.m in Sources */,
 				6284A52A207D150E007D62B6 /* AppDelegate.m in Sources */,
+				6279DE76207F458100F80FD9 /* ZYSliderView.m in Sources */,
 				6284A55F207D1C21007D62B6 /* ZYPlayerManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -7,7 +7,9 @@
 //
 
 #import "ZYPlayerView.h"
+#import "Masonry.h"
 #import <AVFoundation/AVFoundation.h>
+#import "ZYSliderView.h"
 
 typedef NS_ENUM(NSInteger, ZYAVPlayerPlayStatus) {
     ZYAVPlayerPlayStatusUnknown = 0,//默认未知
@@ -28,7 +30,7 @@ static NSString * ZYAVPlayerLoadedTimeRanges = @"loadedTimeRanges";//缓冲的�
 static NSString * ZYAVPlayerPlaybackBufferEmpty = @"playbackBufferEmpty";//缓冲的状态
 static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";//缓冲的状态
 
-@interface ZYPlayerView ()
+@interface ZYPlayerView () <ZYPlayerViewDelegate>
 @property (nonatomic, strong) UIButton *backButton;//返回
 @property (nonatomic, strong) UIButton *downloadButton;//下载
 @property (nonatomic, strong) UIButton *playButton;//下载
@@ -37,33 +39,26 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
 @property (nonatomic, strong) UILabel *titleLabel;//标题
 @property (nonatomic, strong) UILabel *currentTimeLabel;//当前播放时间
 @property (nonatomic, strong) UILabel *totalTimeLabel;//总时间
-@property (nonatomic, strong) UISlider *progressSlider;//进度条
-@property (nonatomic, strong) UIView *progressSliderBackView;//进度条背景框
-@property (nonatomic, strong) UIView *progressSliderBufferView;//缓冲进度条
-@property (nonatomic, assign, getter=isSliderDragging) BOOL sliderDragging;
+@property (nonatomic, strong) ZYSliderView *sliderView;//进度条
 
 @property (nonatomic, strong) AVPlayer *player;//播放器
 @property (nonatomic, strong) AVPlayerItem *playerItem;//播放单元
 @property (nonatomic, strong) AVPlayerLayer *playerLayer;//播放界面（layer）
 @property (nonatomic, strong)  AVURLAsset *urlAsset;//播放集合
 
-@property (nonatomic, assign, getter=isTouchedHidenSubviews) BOOL touchedHidenSubviews;//是否点击了屏幕,一遍隐藏和显示按钮
+@property (nonatomic, assign, getter=isTouchedHidenSubviews) BOOL touchedHidenSubviews;//是否点击了屏幕,隐藏和显示按钮
 @property (nonatomic, assign) ZYAVPlayerPlayStatus playStatus;//播放状态
 @property (nonatomic, strong) id playerTimeObserve;//监听时时播放时间
 @property (nonatomic, assign) NSInteger currentTimeNum;//当前播放的秒数,方便切换屏幕继续播放
 
-@property (nonatomic, weak) NSTimer *timer;//添加定时器,10秒后自动隐藏所有按钮,使用timerInterval
-@property (nonatomic, assign) NSTimeInterval timerInterval;//
 @end
 
 @implementation ZYPlayerView
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        _timerInterval = 10.0;
         _playStatus = ZYAVPlayerPlayStatusUnknown;
         _currentTimeNum = 0;
-        _sliderDragging = NO;
         
         self.backgroundColor = [UIColor blackColor];
         self.touchedHidenSubviews = NO;
@@ -78,14 +73,9 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         [self addSubview:self.currentTimeLabel];
         [self addSubview:self.totalTimeLabel];
         
-        [self addSubview:self.progressSliderBackView];
-        [self addSubview:self.progressSliderBufferView];
-        [self addSubview:self.progressSlider];
+        [self addSubview:self.sliderView];
         
         [self palyerViewLayeroutSubView];
-        
-        //自动隐藏所有按钮--意义不大
-//        self.timer = [NSTimer scheduledTimerWithTimeInterval:_timerInterval target:self selector:@selector(autoHidenAllButton) userInfo:nil repeats:YES];
     }
     return self;
 }
@@ -128,22 +118,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     self.playStatus = ZYAVPlayerPlayStatusEnd;
     self.playButton.selected = NO;
     self.lockButton.selected = NO;
-    
-    self.touchedHidenSubviews = NO;
-    self.lockButton.hidden = self.touchedHidenSubviews;
-    self.backButton.hidden = self.touchedHidenSubviews;
-    self.playButton.hidden = self.touchedHidenSubviews;
-    self.downloadButton.hidden = self.touchedHidenSubviews;
-    self.fullScreenButton.hidden = self.touchedHidenSubviews;
-    self.titleLabel.hidden = self.touchedHidenSubviews;
-    self.currentTimeLabel.hidden = self.touchedHidenSubviews;
-    self.totalTimeLabel.hidden = self.touchedHidenSubviews;
-    self.progressSliderBackView.hidden = self.touchedHidenSubviews;
-    self.progressSliderBufferView.hidden = self.touchedHidenSubviews;
-    self.progressSlider.hidden = self.touchedHidenSubviews;
-    
-    [self.timer invalidate];
-    self.timer = nil;
+    [self setSubviewsHiddenWithStatus:NO];
 }
 - (void)playerPlayToError:(NSNotification *)notification {
     self.playStatus = ZYAVPlayerPlayStatusFailed;
@@ -178,29 +153,26 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     CMTime duration = self.playerItem.duration;
     CGFloat totalDuration = CMTimeGetSeconds(duration);//总时长
     
-    __block CGFloat bufferViewWidth = (timeInterval / totalDuration) * CGRectGetWidth(self.progressSliderBackView.bounds);
+    __block CGFloat bufferViewWidth = (timeInterval / totalDuration) * CGRectGetWidth(self.sliderView.bounds);
     
-    [self.progressSliderBufferView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(bufferViewWidth);
-    }];
-    [self layoutIfNeeded];
+    self.sliderView.sliderBufferViewWidth = bufferViewWidth;
+    
 }
 - (void)detalPlayerItemStatus {
-    if (self.playerItem.status == AVPlayerItemStatusReadyToPlay) {//将要播放
+    if (self.playerItem.status == AVPlayerItemStatusReadyToPlay) {//将要播放--此方法只会在最开始播放时走一次
         self.playButton.selected = YES;
         [self.player play];
         self.playStatus = ZYAVPlayerPlayStatusPlay;
         
-        //获取总时长
-        __block double totalTimeSecond = (double)self.urlAsset.duration.value / (double)self.urlAsset.duration.timescale;
+        // 获取总时长
+        double totalTimeSecond = (double)self.urlAsset.duration.value / (double)self.urlAsset.duration.timescale;
         NSInteger totalMinute = totalTimeSecond / 60;
         NSInteger totalSecond = (int)totalTimeSecond % 60;
         self.totalTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)totalMinute,(int)totalSecond];
-        self.progressSlider.maximumValue = floor(totalTimeSecond);
         
-        //获取当前时长
-        [self setplayerTimeObserveWithTotalTimeSecond:totalTimeSecond];
-
+        // 监听播放进度,添加获取当前时长
+        [self setplayerTimeObserve];
+        
     } else if (self.playerItem.status == AVPlayerItemStatusFailed) {//播放失败
         self.playStatus = ZYAVPlayerPlayStatusFailed;
         [self.player pause];
@@ -211,16 +183,16 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
 }
 
 //获取当前时长
-- (void)setplayerTimeObserveWithTotalTimeSecond:(double)totalTimeSecond {
+- (void)setplayerTimeObserve {
+    __block double totalTimeSecond = (double)self.urlAsset.duration.value / (double)self.urlAsset.duration.timescale;
     __weak typeof(self) weakSelf = self;
     self.playerTimeObserve = [self.player addPeriodicTimeObserverForInterval:CMTimeMake(1.0, 1.0) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
-        double currentTimeSecond  = CMTimeGetSeconds(time);
-        weakSelf.currentTimeNum = (NSInteger)currentTimeSecond;
+        double currentTimeSecond = CMTimeGetSeconds(time);//当前时长
         if (currentTimeSecond) {
             NSInteger currentMinute =  currentTimeSecond / 60;
             NSInteger currentSecond =  (int)currentTimeSecond % 60;
             weakSelf.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)currentMinute,(int)currentSecond];
-            weakSelf.progressSlider.value = currentTimeSecond;
+            weakSelf.sliderView.sliderCurrentWidth = currentTimeSecond / totalTimeSecond * (CGRectGetWidth(weakSelf.sliderView.bounds) - 15);
             if (floor(currentTimeSecond) == floor(totalTimeSecond)) {
                 weakSelf.playStatus = ZYAVPlayerPlayStatusEnd;
             }
@@ -242,46 +214,51 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemPlaybackStalledNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
-    [self.timer invalidate];
-    self.timer = nil;
 }
 
 #pragma mark - event
-- (void)slideValueChanged:(UIPanGestureRecognizer *)panGesture {
+- (void)sliderValueChangedWithPanGesture:(UIPanGestureRecognizer *)panGesture {
     CGFloat totalTimeSecond = self.urlAsset.duration.value / self.urlAsset.duration.timescale;
-    CGPoint sliderPoint = [panGesture locationInView:self.progressSlider];
-    CGFloat sliderWidth = CGRectGetWidth(self.progressSlider.bounds);
-    NSLog(@"%f",sliderPoint.x);
-    if (sliderPoint.x < 0 || sliderPoint.x > sliderWidth) {
-        return;
+    CGPoint sliderPoint = [panGesture locationInView:self.sliderView];
+    sliderPoint = [self.sliderView convertPoint:sliderPoint toView:self.sliderView];
+    CGFloat sliderWidth = CGRectGetWidth(self.sliderView.bounds);
+//    CGFloat sliderHeight = CGRectGetHeight(self.sliderView.bounds);
+    
+    if (sliderPoint.x <= 0) {
+        sliderPoint.x = 0;
+    }
+    if (sliderPoint.x >= sliderWidth) {
+        sliderPoint.x = sliderWidth;
     }
     
     //当前滑动距离换算成对应的秒数
-     CGFloat slideValue = sliderPoint.x / sliderWidth * totalTimeSecond;
+    CGFloat currentTimeSecond = sliderPoint.x / sliderWidth * totalTimeSecond;
+    NSInteger currentMinute =  currentTimeSecond / 60;
+    NSInteger currentSecond =  (int)currentTimeSecond % 60;
     
-    NSInteger currentMinute =  slideValue / 60;
-    NSInteger currentSecond =  (int)slideValue % 60;
+     //拖拽时,取消监听播放状态对slider的值得修改,由拖拽手势来修改...
+    if (self.playerTimeObserve) {
+        [self.player removeTimeObserver:self.playerTimeObserve];
+        self.playerTimeObserve = nil;
+    }
     
-    if (panGesture.state == UIGestureRecognizerStatePossible) {
-        self.sliderDragging = NO;
-    } else if (panGesture.state == UIGestureRecognizerStateBegan) {//拖拽开始时,取消监听播放状态对slider的值得修改,由拖拽手势来修改
-        self.sliderDragging = YES;
-        [self.playerItem removeObserver:self forKeyPath:ZYAVPlayerStatus];
-    } else if (panGesture.state == UIGestureRecognizerStateChanged) {//拖拽时只修改显示的时间和滑动值,不触发对应播放,维持原有播放
-        self.sliderDragging = YES;
+    if (panGesture.state == UIGestureRecognizerStateChanged) {//拖拽时只修改显示的时间和滑动值,不触发对获取当前播放时间,维持原有播放
+        if (self.playerTimeObserve) {
+            [self.player removeTimeObserver:self.playerTimeObserve];
+            self.playerTimeObserve = nil;
+        }
         self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)currentMinute,(int)currentSecond];
-        self.progressSlider.value = slideValue;
-    } else if (panGesture.state == UIGestureRecognizerStateEnded) {//拖拽结束再播放,在监听播放状态
-        self.sliderDragging = NO;
-        [self.player seekToTime:CMTimeMake(slideValue, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
-        // 监听播放状态--slider控件有问题?
-        [self.playerItem addObserver:self forKeyPath:ZYAVPlayerStatus options:NSKeyValueObservingOptionNew context:nil];
-    } else if (panGesture.state == UIGestureRecognizerStateCancelled) {
-        self.sliderDragging = NO;
-    } else if (panGesture.state == UIGestureRecognizerStateFailed) {
-        self.sliderDragging = NO;
-    } else if (panGesture.state == UIGestureRecognizerStateRecognized) {
-        self.sliderDragging = NO;
+        self.sliderView.sliderCurrentWidth = currentTimeSecond / totalTimeSecond * (sliderWidth - 15);
+    } else if (panGesture.state == UIGestureRecognizerStateEnded) {//拖拽结束再播放,在监听播放当前播放时长
+        [self.player seekToTime:CMTimeMake(currentTimeSecond, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+        if (self.playStatus == ZYAVPlayerPlayStatusPause || self.playStatus == ZYAVPlayerPlayStatusEnd) {
+            [self.player play];
+            self.playButton.selected = YES;
+        }
+        //延迟1.0秒监听当前播放时长,否则slider会出现突变现象
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self setplayerTimeObserve];
+        });
     }
 }
 - (void)backButtonClick:(UIButton *)button {//返回
@@ -292,16 +269,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
 }
 - (void)lockButtonClick:(UIButton *)button {//锁屏
     button.selected = !button.selected;
-    self.backButton.hidden = button.selected;
-    self.playButton.hidden = button.selected;
-    self.downloadButton.hidden = button.selected;
-    self.fullScreenButton.hidden = button.selected;
-    self.titleLabel.hidden = button.selected;
-    self.currentTimeLabel.hidden = button.selected;
-    self.totalTimeLabel.hidden = button.selected;
-    self.progressSliderBackView.hidden = button.selected;
-    self.progressSliderBufferView.hidden = button.selected;
-    self.progressSlider.hidden = button.selected;
+    [self setSubviewsHiddenWithStatus:button.selected];
 }
 - (void)playButtonClick:(UIButton *)button {//播放/暂停
     button.selected = !button.selected;
@@ -322,39 +290,29 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         [self.delegate swiftPlayScreenWithFullScreenButton:button];
     }
 }
-- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    if (self.lockButton.selected) {
-        return;
-    }
-    self.touchedHidenSubviews = !self.touchedHidenSubviews;
-    
-    self.lockButton.hidden = self.touchedHidenSubviews;
-    self.backButton.hidden = self.touchedHidenSubviews;
-    self.playButton.hidden = self.touchedHidenSubviews;
-    self.downloadButton.hidden = self.touchedHidenSubviews;
-    self.fullScreenButton.hidden = self.touchedHidenSubviews;
-    self.titleLabel.hidden = self.touchedHidenSubviews;
-    self.currentTimeLabel.hidden = self.touchedHidenSubviews;
-    self.totalTimeLabel.hidden = self.touchedHidenSubviews;
-    self.progressSliderBackView.hidden = self.touchedHidenSubviews;
-    self.progressSliderBufferView.hidden = self.touchedHidenSubviews;
-    self.progressSlider.hidden = self.touchedHidenSubviews;
-}
+//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+//    if (self.lockButton.selected) {
+//        return;
+//    }
+//    self.touchedHidenSubviews = !self.touchedHidenSubviews;
+//    self.lockButton.hidden = self.touchedHidenSubviews;
+//    [self setSubviewsHiddenWithStatus:self.touchedHidenSubviews];
+//}
 
 #pragma mark - NSTimer
 - (void)autoHidenAllButton {
-    self.touchedHidenSubviews = YES;
-    self.lockButton.hidden = self.touchedHidenSubviews;
-    self.backButton.hidden = self.touchedHidenSubviews;
-    self.playButton.hidden = self.touchedHidenSubviews;
-    self.downloadButton.hidden = self.touchedHidenSubviews;
-    self.fullScreenButton.hidden = self.touchedHidenSubviews;
-    self.titleLabel.hidden = self.touchedHidenSubviews;
-    self.currentTimeLabel.hidden = self.touchedHidenSubviews;
-    self.totalTimeLabel.hidden = self.touchedHidenSubviews;
-    self.progressSliderBackView.hidden = self.touchedHidenSubviews;
-    self.progressSliderBufferView.hidden = self.touchedHidenSubviews;
-    self.progressSlider.hidden = self.touchedHidenSubviews;
+    self.lockButton.hidden = YES;
+    [self setSubviewsHiddenWithStatus:YES];
+}
+- (void)setSubviewsHiddenWithStatus:(BOOL)status {
+    self.backButton.hidden = status;
+    self.playButton.hidden = status;
+    self.downloadButton.hidden = status;
+    self.fullScreenButton.hidden = status;
+    self.titleLabel.hidden = status;
+    self.currentTimeLabel.hidden = status;
+    self.totalTimeLabel.hidden = status;
+    self.sliderView.hidden = status;
 }
 
 #pragma mark - Layerout SubView
@@ -405,64 +363,21 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         make.width.mas_equalTo(42);
     }];
     
-    [self.progressSliderBackView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.sliderView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.currentTimeLabel.mas_right);
         make.right.mas_equalTo(self.totalTimeLabel.mas_left);
-        make.centerY.mas_equalTo(self.playButton);
-        make.height.mas_equalTo(3);
-    }];
-    
-    [self.progressSliderBufferView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.currentTimeLabel.mas_right);
-        make.centerY.mas_equalTo(self.playButton);
-        make.height.mas_equalTo(3);
-        make.width.mas_equalTo(0);
-    }];
-    
-    [self.progressSlider mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(self.currentTimeLabel.mas_right);
-        make.right.mas_equalTo(self.totalTimeLabel.mas_left);
-        make.centerY.mas_equalTo(self.playButton.mas_centerY).offset(-1.2);
-        make.height.mas_equalTo(10);
+        make.centerY.mas_equalTo(self.playButton.mas_centerY);
+        make.height.mas_equalTo(40);
     }];
 }
 
 #pragma mark - getter
-- (UISlider *)progressSlider {
-    if (!_progressSlider) {
-        _progressSlider = [[UISlider alloc] init];
-        _progressSlider.backgroundColor = [UIColor clearColor];
-        _progressSlider.minimumValue = 0.0f;
-        _progressSlider.value = 0.0f;
-        _progressSlider.maximumValue = 3000.0f;
-        _progressSlider.continuous = YES;
-        _progressSlider.minimumTrackTintColor = [UIColor greenColor];
-        _progressSlider.maximumTrackTintColor = [UIColor clearColor];
-        [_progressSlider setThumbImage:[UIImage imageNamed:@"ZFPlayer.bundle/ZFPlayer_slider"] forState:UIControlStateNormal];
-        [_progressSlider setThumbImage:[UIImage imageNamed:@"ZFPlayer.bundle/ZFPlayer_slider"] forState:UIControlStateHighlighted];
-        [_progressSlider addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(slideValueChanged:)]];
+- (ZYSliderView *)sliderView {
+    if (!_sliderView) {
+        _sliderView = [[ZYSliderView alloc] init];
+        _sliderView.delegate = (id)self;
     }
-    return _progressSlider;
-}
-- (UIView *)progressSliderBackView {
-    if (!_progressSliderBackView) {
-        _progressSliderBackView = [[UIView alloc] init];
-        _progressSliderBackView.backgroundColor = [UIColor clearColor];
-        _progressSliderBackView.layer.cornerRadius = 1.5f;
-        _progressSliderBackView.layer.masksToBounds = YES;
-        _progressSliderBackView.layer.borderColor = [UIColor whiteColor].CGColor;
-        _progressSliderBackView.layer.borderWidth = 0.5f;
-    }
-    return _progressSliderBackView;
-}
-- (UIView *)progressSliderBufferView {
-    if (!_progressSliderBufferView) {
-        _progressSliderBufferView = [[UIView alloc] init];
-        _progressSliderBufferView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.7];
-        _progressSliderBufferView.layer.cornerRadius = 1.5f;
-        _progressSliderBufferView.layer.masksToBounds = YES;
-    }
-    return _progressSliderBufferView;
+    return _sliderView;
 }
 - (UILabel *)titleLabel {
     if (!_titleLabel) {

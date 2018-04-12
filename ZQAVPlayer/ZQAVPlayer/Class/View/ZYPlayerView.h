@@ -14,7 +14,7 @@
 @end
 
 @interface ZYPlayerView : UIView
-@property (nonatomic, copy) NSString *urlString;//视频连接
+@property (nonatomic, copy) NSString *urlString;//视频连接...
 
 @property (nonatomic, weak) id<ZYPlayerViewDelegate> delegate;
 
