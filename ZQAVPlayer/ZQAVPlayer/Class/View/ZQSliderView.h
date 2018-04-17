@@ -13,7 +13,7 @@
 @end
 
 @interface ZQSliderView : UIView
-@property (nonatomic, assign) CGFloat sliderCurrentWidth;//当前slider的值...
+@property (nonatomic, assign) CGFloat sliderCurrentWidth;//当前slider的值
 @property (nonatomic, assign) CGFloat sliderBufferViewWidth;//缓冲进度条
 
 @property (nonatomic, weak) id<ZQSliderViewDelegate> delegate;

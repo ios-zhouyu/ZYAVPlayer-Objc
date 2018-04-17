@@ -45,12 +45,13 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
 @property (nonatomic, strong) AVPlayerItem *playerItem;//播放单元
 @property (nonatomic, strong) AVPlayerLayer *playerLayer;//播放界面（layer）
 @property (nonatomic, strong)  AVURLAsset *urlAsset;//播放集合
+@property (nonatomic, strong) AVAssetImageGenerator *assetImageGenerator;//预览图
 
 @property (nonatomic, assign, getter=isTouchedHidenSubviews) BOOL touchedHidenSubviews;//是否点击了屏幕,隐藏和显示按钮
 @property (nonatomic, assign) ZQAVPlayerPlayStatus playStatus;//播放状态
 @property (nonatomic, strong) id playerTimeObserve;//监听时时播放时间
 @property (nonatomic, assign) NSInteger currentTimeNum;//当前播放的秒数,方便切换屏幕继续播放
-@property (nonatomic, assign, getter=isSliderDragging) BOOL sliderDragging;
+@property (nonatomic, assign, getter=isSliderDragging) BOOL sliderDragging;//是否在拖拽小圆点
 @end
 
 @implementation ZQPlayerView
@@ -118,6 +119,24 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     [notificationCenter addObserver:self selector:@selector(playerPlayToEnterBack:) name:UIApplicationDidEnterBackgroundNotification object:nil];
     // 监听从后台返回
     [notificationCenter addObserver:self selector:@selector(playerPlayToBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+//获取预览图
+- (UIImage*) thumbnailImageWithAVURLAsset:(AVURLAsset *)urlAsset atTime:(NSTimeInterval)time {
+    self.assetImageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:urlAsset];
+    self.assetImageGenerator.appliesPreferredTrackTransform = YES;
+    self.assetImageGenerator.apertureMode = AVAssetImageGeneratorApertureModeEncodedPixels;
+    
+    CGImageRef thumbnailImageRef = NULL;
+    CFTimeInterval thumbnailImageTime = time;
+    NSError *thumbnailImageGenerationError = nil;
+    thumbnailImageRef = [self.assetImageGenerator copyCGImageAtTime:CMTimeMake(thumbnailImageTime, 60)actualTime:NULL error:&thumbnailImageGenerationError];
+    
+    if(!thumbnailImageRef) {
+        NSLog(@"thumbnailImageGenerationError %@",thumbnailImageGenerationError);
+    }
+    UIImage*thumbnailImage = thumbnailImageRef ? [[UIImage alloc]initWithCGImage: thumbnailImageRef] : nil;
+    return thumbnailImage;
 }
 
 #pragma mark - NSNotificationCenter
@@ -224,7 +243,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
-#pragma mark - event
+#pragma mark - ZQSliderViewDelegate
 - (void)sliderValueChangedWithPanGesture:(UIPanGestureRecognizer *)panGesture {
     
     CGFloat totalTimeSecond = self.urlAsset.duration.value / self.urlAsset.duration.timescale;
@@ -290,13 +309,14 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         self.sliderDragging = NO;
     }
 }
-- (void)removePlayerTimeObserve{
+- (void)removePlayerTimeObserve{//移除当前播放时间监听者
     if (self.playerTimeObserve) {
         [self.player removeTimeObserver:self.playerTimeObserve];
         self.playerTimeObserve = nil;
     }
 }
 
+#pragma mark - button event
 - (void)backButtonClick:(UIButton *)button {//返回
     if (self.delegate && [self.delegate respondsToSelector:@selector(backToSuperController)]) {
         [self.delegate backToSuperController];
@@ -331,7 +351,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         [self.delegate swiftPlayScreenWithFullScreenButton:button];
     }
 }
-- (void)doubleTap:(UITapGestureRecognizer *)doubleTapGesture {
+- (void)doubleTap:(UITapGestureRecognizer *)doubleTapGesture {//双击隐藏所有子控件
     if (self.lockButton.selected || self.playStatus == ZQAVPlayerPlayStatusEnd) {
         return;
     }
