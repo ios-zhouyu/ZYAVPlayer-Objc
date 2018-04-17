@@ -50,7 +50,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
 @property (nonatomic, assign) ZQAVPlayerPlayStatus playStatus;//播放状态
 @property (nonatomic, strong) id playerTimeObserve;//监听时时播放时间
 @property (nonatomic, assign) NSInteger currentTimeNum;//当前播放的秒数,方便切换屏幕继续播放
-
+@property (nonatomic, assign, getter=isSliderDragging) BOOL sliderDragging;
 @end
 
 @implementation ZQPlayerView
@@ -59,6 +59,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     if (self = [super initWithFrame:frame]) {
         _playStatus = ZQAVPlayerPlayStatusUnknown;
         _currentTimeNum = 0;
+        _sliderDragging = NO;
         
         self.backgroundColor = [UIColor blackColor];
         self.touchedHidenSubviews = NO;
@@ -76,6 +77,12 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         [self addSubview:self.sliderView];
         
         [self palyerViewLayeroutSubView];
+        
+        //双击手势控制控件的隐藏和显示
+        UITapGestureRecognizer *doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTap:)];
+        doubleTap.numberOfTapsRequired = 2;
+        [self addGestureRecognizer:doubleTap];
+        
     }
     return self;
 }
@@ -149,14 +156,10 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     float startSeconds = CMTimeGetSeconds(timeRange.start);
     float durationSeconds = CMTimeGetSeconds(timeRange.duration);
     NSTimeInterval timeInterval = startSeconds + durationSeconds;// 计算缓冲总进度
-    
     CMTime duration = self.playerItem.duration;
     CGFloat totalDuration = CMTimeGetSeconds(duration);//总时长
-    
     __block CGFloat bufferViewWidth = (timeInterval / totalDuration) * CGRectGetWidth(self.sliderView.bounds);
-    
     self.sliderView.sliderBufferViewWidth = bufferViewWidth;
-    
 }
 - (void)detalPlayerItemStatus {
     if (self.playerItem.status == AVPlayerItemStatusReadyToPlay) {//将要播放--此方法只会在最开始播放时走一次
@@ -194,8 +197,10 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         if (currentTimeSecond) {
             NSInteger currentMinute =  currentTimeSecond / 60;
             NSInteger currentSecond =  (int)currentTimeSecond % 60;
-            weakSelf.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)currentMinute,(int)currentSecond];
-            weakSelf.sliderView.sliderCurrentWidth = currentTimeSecond / totalTimeSecond * (CGRectGetWidth(weakSelf.sliderView.bounds) - 15);
+            if (!weakSelf.isSliderDragging) {
+                weakSelf.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)currentMinute,(int)currentSecond];
+                weakSelf.sliderView.sliderCurrentWidth = currentTimeSecond / totalTimeSecond * (CGRectGetWidth(weakSelf.sliderView.bounds) - 15);
+            }
             if (floor(currentTimeSecond) == floor(totalTimeSecond)) {
                 weakSelf.playStatus = ZQAVPlayerPlayStatusEnd;
             }
@@ -226,6 +231,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     CGPoint sliderPoint = [panGesture locationInView:self.sliderView];
     sliderPoint = [self.sliderView convertPoint:sliderPoint toView:self.sliderView];
     CGFloat sliderWidth = CGRectGetWidth(self.sliderView.bounds);
+    CGFloat sliderHeight = CGRectGetHeight(self.sliderView.bounds);
     
     if (sliderPoint.x <= 0) {
         sliderPoint.x = 0;
@@ -239,11 +245,34 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     NSInteger currentMinute =  currentTimeSecond / 60;
     NSInteger currentSecond =  (int)currentTimeSecond % 60;
     
-     //拖拽时,取消监听播放状态对slider的值得修改,由拖拽手势来修改...
-    [self removePlayerTimeObserve];
-
+     //使用是否拖拽的bool值来控制,而不是移除playerTimeObserve,有时候移除不及时,出现小圆点突变位置的bug
+    self.sliderDragging = YES;
+    
+    if (sliderPoint.y < -20 ||  sliderPoint.y > sliderHeight + 20) {//限制滑动的范围
+        [self.sliderView.sliderCircleView removeGestureRecognizer:panGesture];//先删除手势在添加
+        //调到对应播放时间播放
+        [self.player seekToTime:CMTimeMake(currentTimeSecond, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+        
+        //更改时间和进度
+        self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)currentMinute,(int)currentSecond];
+        self.sliderView.sliderCurrentWidth = currentTimeSecond / totalTimeSecond * (sliderWidth - 15);
+        [self.sliderView.sliderCircleView addGestureRecognizer:self.sliderView.panGesture];
+        
+        if (self.playStatus == ZQAVPlayerPlayStatusPause || self.playStatus == ZQAVPlayerPlayStatusEnd) {
+            [self.player play];
+            self.playButton.selected = YES;
+            self.playStatus = ZQAVPlayerPlayStatusPlay;
+        }
+        //延迟1.0秒监听当前播放时长,否则slider会出现突变现象
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.sliderDragging = NO;
+        });
+        return;
+    }
+    
+    //正常手势事件
     if (panGesture.state == UIGestureRecognizerStateChanged) {//拖拽时只修改显示的时间和滑动值,不触发对获取当前播放时间,维持原有播放
-        [self removePlayerTimeObserve];
+        self.sliderDragging = YES;
         self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)currentMinute,(int)currentSecond];
         self.sliderView.sliderCurrentWidth = currentTimeSecond / totalTimeSecond * (sliderWidth - 15);
     } else if (panGesture.state == UIGestureRecognizerStateEnded) {//拖拽结束再播放,在监听播放当前播放时长
@@ -251,16 +280,14 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         if (self.playStatus == ZQAVPlayerPlayStatusPause || self.playStatus == ZQAVPlayerPlayStatusEnd) {
             [self.player play];
             self.playButton.selected = YES;
+            self.playStatus = ZQAVPlayerPlayStatusPlay;
         }
-        //延迟1.0秒监听当前播放时长,否则slider会出现突变现象
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self setplayerTimeObserve];
+        //延迟0.5秒监听当前播放时长,否则slider会出现突变现象
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.sliderDragging = NO;
         });
     } else {
-        if (self.playerTimeObserve) {
-            [self.player removeTimeObserver:self.playerTimeObserve];
-            self.playerTimeObserve = nil;
-        }
+        self.sliderDragging = NO;
     }
 }
 - (void)removePlayerTimeObserve{
@@ -279,6 +306,9 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     
 }
 - (void)lockButtonClick:(UIButton *)button {//锁屏
+    if (self.playStatus == ZQAVPlayerPlayStatusEnd) {
+        return;
+    }
     button.selected = !button.selected;
     [self setSubviewsHiddenWithStatus:button.selected];
 }
@@ -301,20 +331,15 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         [self.delegate swiftPlayScreenWithFullScreenButton:button];
     }
 }
-//- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-//    if (self.lockButton.selected) {
-//        return;
-//    }
-//    self.touchedHidenSubviews = !self.touchedHidenSubviews;
-//    self.lockButton.hidden = self.touchedHidenSubviews;
-//    [self setSubviewsHiddenWithStatus:self.touchedHidenSubviews];
-//}
-
-#pragma mark - NSTimer
-- (void)autoHidenAllButton {
-    self.lockButton.hidden = YES;
-    [self setSubviewsHiddenWithStatus:YES];
+- (void)doubleTap:(UITapGestureRecognizer *)doubleTapGesture {
+    if (self.lockButton.selected || self.playStatus == ZQAVPlayerPlayStatusEnd) {
+        return;
+    }
+    self.touchedHidenSubviews = !self.touchedHidenSubviews;
+    self.lockButton.hidden = self.touchedHidenSubviews;
+    [self setSubviewsHiddenWithStatus:self.touchedHidenSubviews];
 }
+//隐藏所有按钮
 - (void)setSubviewsHiddenWithStatus:(BOOL)status {
     self.backButton.hidden = status;
     self.playButton.hidden = status;

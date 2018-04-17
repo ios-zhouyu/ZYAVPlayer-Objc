@@ -11,7 +11,6 @@
 
 @interface ZQSliderView ()
 @property (nonatomic, strong) UISlider *slider;//进度条...
-@property (nonatomic, strong) UIView *sliderCircleView;//滚动按钮
 @property (nonatomic, strong) UIView *circleView;//滚动按钮小白点
 @property (nonatomic, strong) UIView *sliderCurrentView;//进度条
 @property (nonatomic, strong) UIView *sliderBackView;//进度条背景框
@@ -98,9 +97,15 @@
     if (!_sliderCircleView) {
         _sliderCircleView = [[UIView alloc] init];
         _sliderCircleView.backgroundColor = [UIColor clearColor];
-        [_sliderCircleView addGestureRecognizer:[[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(sliderValueChanged:)]];
+        [_sliderCircleView addGestureRecognizer:self.panGesture];
     }
     return _sliderCircleView;
+}
+- (UIPanGestureRecognizer *)panGesture {
+    if (!_panGesture) {
+        _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(sliderValueChanged:)];
+    }
+    return _panGesture;
 }
 - (UIView *)circleView {
     if (!_circleView) {

@@ -18,4 +18,6 @@
 
 @property (nonatomic, weak) id<ZQSliderViewDelegate> delegate;
 
+@property (nonatomic, strong) UIView *sliderCircleView;//滚动按钮
+@property (nonatomic, strong) UIPanGestureRecognizer *panGesture;//进度条滚动按钮拖拽手势
 @end
