@@ -17,7 +17,7 @@
 		6284A542207D150F007D62B6 /* ZQAVPlayerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A541207D150F007D62B6 /* ZQAVPlayerTests.m */; };
 		6284A54D207D150F007D62B6 /* ZQAVPlayerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A54C207D150F007D62B6 /* ZQAVPlayerUITests.m */; };
 		6284A55C207D1628007D62B6 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6284A55B207D1628007D62B6 /* AVFoundation.framework */; };
-		6284A55F207D1C21007D62B6 /* ZYPlayerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A55E207D1C21007D62B6 /* ZYPlayerManager.m */; };
+		62B9C3982085DE40005B1A94 /* ZYPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62B9C3972085DE40005B1A94 /* ZYPlayerController.m */; };
 		676BF49CAF2DBC659A5159D7 /* libPods-ZQAVPlayerUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A70B96930472F1189DE70FCD /* libPods-ZQAVPlayerUITests.a */; };
 		865D9E955DA2050DC25A6112 /* libPods-ZQAVPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE008F0A871FE96C3D1762D0 /* libPods-ZQAVPlayer.a */; };
 		FDAA3D54970561A2DE30BEEF /* libPods-ZQAVPlayerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC22991BFCD97BC6B6ACAE69 /* libPods-ZQAVPlayerTests.a */; };
@@ -64,8 +64,8 @@
 		6284A54C207D150F007D62B6 /* ZQAVPlayerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZQAVPlayerUITests.m; sourceTree = "<group>"; };
 		6284A54E207D150F007D62B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6284A55B207D1628007D62B6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		6284A55D207D1C21007D62B6 /* ZYPlayerManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZYPlayerManager.h; sourceTree = "<group>"; };
-		6284A55E207D1C21007D62B6 /* ZYPlayerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZYPlayerManager.m; sourceTree = "<group>"; };
+		62B9C3962085DE40005B1A94 /* ZYPlayerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZYPlayerController.h; sourceTree = "<group>"; };
+		62B9C3972085DE40005B1A94 /* ZYPlayerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZYPlayerController.m; sourceTree = "<group>"; };
 		7386A343F26913CBA21AEC84 /* Pods-ZQAVPlayerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZQAVPlayerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZQAVPlayerTests/Pods-ZQAVPlayerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		98069F10D73E1095CEA12FE3 /* Pods-ZQAVPlayerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZQAVPlayerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZQAVPlayerTests/Pods-ZQAVPlayerTests.release.xcconfig"; sourceTree = "<group>"; };
 		A2B8DEE391C954EC5AF4DA99 /* Pods-ZQAVPlayerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZQAVPlayerUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZQAVPlayerUITests/Pods-ZQAVPlayerUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -134,8 +134,6 @@
 			children = (
 				6279DE77207F459A00F80FD9 /* ViewController.h */,
 				6279DE78207F459A00F80FD9 /* ViewController.m */,
-				6284A55D207D1C21007D62B6 /* ZYPlayerManager.h */,
-				6284A55E207D1C21007D62B6 /* ZYPlayerManager.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -163,6 +161,8 @@
 				6279DE72207F458000F80FD9 /* ZYPlayerView.m */,
 				6279DE74207F458100F80FD9 /* ZYSliderView.h */,
 				6279DE73207F458000F80FD9 /* ZYSliderView.m */,
+				62B9C3962085DE40005B1A94 /* ZYPlayerController.h */,
+				62B9C3972085DE40005B1A94 /* ZYPlayerController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -544,9 +544,9 @@
 				6279DE79207F459B00F80FD9 /* ViewController.m in Sources */,
 				6279DE75207F458100F80FD9 /* ZYPlayerView.m in Sources */,
 				6284A538207D150F007D62B6 /* main.m in Sources */,
+				62B9C3982085DE40005B1A94 /* ZYPlayerController.m in Sources */,
 				6284A52A207D150E007D62B6 /* AppDelegate.m in Sources */,
 				6279DE76207F458100F80FD9 /* ZYSliderView.m in Sources */,
-				6284A55F207D1C21007D62B6 /* ZYPlayerManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

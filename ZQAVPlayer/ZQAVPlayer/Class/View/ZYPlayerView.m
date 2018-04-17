@@ -163,6 +163,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         self.playButton.selected = YES;
         [self.player play];
         self.playStatus = ZYAVPlayerPlayStatusPlay;
+        self.sliderView.userInteractionEnabled = YES;
         
         // 获取总时长
         double totalTimeSecond = (double)self.urlAsset.duration.value / (double)self.urlAsset.duration.timescale;
@@ -176,9 +177,11 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     } else if (self.playerItem.status == AVPlayerItemStatusFailed) {//播放失败
         self.playStatus = ZYAVPlayerPlayStatusFailed;
         [self.player pause];
+        self.sliderView.userInteractionEnabled = NO;
     } else if (self.playerItem.status == AVPlayerItemStatusUnknown) {//未知错误
         self.playStatus = ZYAVPlayerPlayStatusUnknown;
         [self.player pause];
+        self.sliderView.userInteractionEnabled = NO;
     }
 }
 
@@ -218,11 +221,11 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
 
 #pragma mark - event
 - (void)sliderValueChangedWithPanGesture:(UIPanGestureRecognizer *)panGesture {
+    
     CGFloat totalTimeSecond = self.urlAsset.duration.value / self.urlAsset.duration.timescale;
     CGPoint sliderPoint = [panGesture locationInView:self.sliderView];
     sliderPoint = [self.sliderView convertPoint:sliderPoint toView:self.sliderView];
     CGFloat sliderWidth = CGRectGetWidth(self.sliderView.bounds);
-//    CGFloat sliderHeight = CGRectGetHeight(self.sliderView.bounds);
     
     if (sliderPoint.x <= 0) {
         sliderPoint.x = 0;
@@ -237,16 +240,10 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     NSInteger currentSecond =  (int)currentTimeSecond % 60;
     
      //拖拽时,取消监听播放状态对slider的值得修改,由拖拽手势来修改...
-    if (self.playerTimeObserve) {
-        [self.player removeTimeObserver:self.playerTimeObserve];
-        self.playerTimeObserve = nil;
-    }
-    
+    [self removePlayerTimeObserve];
+
     if (panGesture.state == UIGestureRecognizerStateChanged) {//拖拽时只修改显示的时间和滑动值,不触发对获取当前播放时间,维持原有播放
-        if (self.playerTimeObserve) {
-            [self.player removeTimeObserver:self.playerTimeObserve];
-            self.playerTimeObserve = nil;
-        }
+        [self removePlayerTimeObserve];
         self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)currentMinute,(int)currentSecond];
         self.sliderView.sliderCurrentWidth = currentTimeSecond / totalTimeSecond * (sliderWidth - 15);
     } else if (panGesture.state == UIGestureRecognizerStateEnded) {//拖拽结束再播放,在监听播放当前播放时长
@@ -259,10 +256,24 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self setplayerTimeObserve];
         });
+    } else {
+        if (self.playerTimeObserve) {
+            [self.player removeTimeObserver:self.playerTimeObserve];
+            self.playerTimeObserve = nil;
+        }
     }
 }
+- (void)removePlayerTimeObserve{
+    if (self.playerTimeObserve) {
+        [self.player removeTimeObserver:self.playerTimeObserve];
+        self.playerTimeObserve = nil;
+    }
+}
+
 - (void)backButtonClick:(UIButton *)button {//返回
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(backToSuperController)]) {
+        [self.delegate backToSuperController];
+    }
 }
 - (void)downloadButtonClick:(UIButton *)button {//下载
     
@@ -375,6 +386,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
 - (ZYSliderView *)sliderView {
     if (!_sliderView) {
         _sliderView = [[ZYSliderView alloc] init];
+        _sliderView.userInteractionEnabled = NO;
         _sliderView.delegate = (id)self;
     }
     return _sliderView;

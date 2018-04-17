@@ -10,6 +10,7 @@
 
 @protocol ZYPlayerViewDelegate <NSObject>
 @optional
+- (void)backToSuperController;
 - (void)swiftPlayScreenWithFullScreenButton:(UIButton *)button;
 @end
 
