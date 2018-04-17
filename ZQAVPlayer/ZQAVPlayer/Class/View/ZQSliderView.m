@@ -1,15 +1,15 @@
 //
-//  ZYSliderView.m
+//  ZQSliderView.m
 //  ZQAVPlayer
 //
 //  Created by zhouyu on 12/04/2018.
 //  Copyright © 2018 zhouyu. All rights reserved.
 //
 
-#import "ZYSliderView.h"
+#import "ZQSliderView.h"
 #import "Masonry.h"
 
-@interface ZYSliderView ()
+@interface ZQSliderView ()
 @property (nonatomic, strong) UISlider *slider;//进度条...
 @property (nonatomic, strong) UIView *sliderCircleView;//滚动按钮
 @property (nonatomic, strong) UIView *circleView;//滚动按钮小白点
@@ -18,7 +18,7 @@
 @property (nonatomic, strong) UIView *sliderBufferView;//缓冲进度条
 @end
 
-@implementation ZYSliderView
+@implementation ZQSliderView
 
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];

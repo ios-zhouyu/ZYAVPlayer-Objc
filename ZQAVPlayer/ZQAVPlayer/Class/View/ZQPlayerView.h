@@ -8,15 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol ZYPlayerViewDelegate <NSObject>
+@protocol ZQPlayerViewDelegate <NSObject>
 @optional
 - (void)backToSuperController;
 - (void)swiftPlayScreenWithFullScreenButton:(UIButton *)button;
 @end
 
-@interface ZYPlayerView : UIView
+@interface ZQPlayerView : UIView
 @property (nonatomic, copy) NSString *urlString;//视频连接...
 
-@property (nonatomic, weak) id<ZYPlayerViewDelegate> delegate;
+@property (nonatomic, weak) id<ZQPlayerViewDelegate> delegate;
 
 @end

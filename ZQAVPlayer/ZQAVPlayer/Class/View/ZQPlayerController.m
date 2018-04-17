@@ -1,18 +1,18 @@
 //
-//  ZYPlayerController.m
+//  ZQPlayerController.m
 //  ZQAVPlayer
 //
 //  Created by zhouyu on 17/04/2018.
 //  Copyright © 2018 zhouyu. All rights reserved.
 //
 
-#import "ZYPlayerController.h"
+#import "ZQPlayerController.h"
 
-@interface ZYPlayerController ()<ZYPlayerViewDelegate>
-@property (nonatomic, strong) ZYPlayerView *playerView;
+@interface ZQPlayerController ()<ZQPlayerViewDelegate>
+@property (nonatomic, strong) ZQPlayerView *playerView;
 @end
 
-@implementation ZYPlayerController
+@implementation ZQPlayerController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -22,7 +22,7 @@
     
     self.title = @"视频播放";
     
-    ZYPlayerView *playerView = [[ZYPlayerView alloc] init];
+    ZQPlayerView *playerView = [[ZQPlayerView alloc] init];
     playerView.delegate = self;
     [self.view addSubview:playerView];
     self.playerView = playerView;

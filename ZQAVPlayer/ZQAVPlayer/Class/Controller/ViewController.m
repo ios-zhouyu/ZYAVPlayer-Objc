@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "ZYPlayerController.h"
+#import "ZQPlayerController.h"
 
 @interface ViewController ()
 
@@ -30,7 +30,7 @@
 }
 
 - (void)buttonClick{
-    [self.navigationController pushViewController:[[ZYPlayerController alloc] init] animated:YES];
+    [self.navigationController pushViewController:[[ZQPlayerController alloc] init] animated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZYPlayerController : UIViewController
+@interface ZQPlayerController : UIViewController
 
 @end

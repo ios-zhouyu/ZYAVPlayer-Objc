@@ -8,14 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol ZYSliderViewDelegate <NSObject>
+@protocol ZQSliderViewDelegate <NSObject>
 - (void)sliderValueChangedWithPanGesture:(UIPanGestureRecognizer *)panGesture;//拖拽进度条
 @end
 
-@interface ZYSliderView : UIView
+@interface ZQSliderView : UIView
 @property (nonatomic, assign) CGFloat sliderCurrentWidth;//当前slider的值...
 @property (nonatomic, assign) CGFloat sliderBufferViewWidth;//缓冲进度条
 
-@property (nonatomic, weak) id<ZYSliderViewDelegate> delegate;
+@property (nonatomic, weak) id<ZQSliderViewDelegate> delegate;
 
 @end

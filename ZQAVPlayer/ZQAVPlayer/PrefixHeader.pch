@@ -16,7 +16,7 @@
 #import "YYModel.h"
 #import "UIImageView+WebCache.h"
 
-#import "ZYPlayerView.h"
+#import "ZQPlayerView.h"
 
 // 自定义输入日志 Log
 #ifdef  DEBUG // 如果当前是开发 调试阶段可以用ZYLog输入

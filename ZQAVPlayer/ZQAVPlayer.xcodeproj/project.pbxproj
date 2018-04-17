@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		62510A48207DB6860009CE2B /* ZFPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 62510A47207DB6860009CE2B /* ZFPlayer.bundle */; };
-		6279DE75207F458100F80FD9 /* ZYPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6279DE72207F458000F80FD9 /* ZYPlayerView.m */; };
-		6279DE76207F458100F80FD9 /* ZYSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6279DE73207F458000F80FD9 /* ZYSliderView.m */; };
+		6279DE75207F458100F80FD9 /* ZQPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6279DE72207F458000F80FD9 /* ZQPlayerView.m */; };
+		6279DE76207F458100F80FD9 /* ZQSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6279DE73207F458000F80FD9 /* ZQSliderView.m */; };
 		6279DE79207F459B00F80FD9 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6279DE78207F459A00F80FD9 /* ViewController.m */; };
 		6284A52A207D150E007D62B6 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A529207D150E007D62B6 /* AppDelegate.m */; };
 		6284A532207D150F007D62B6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6284A531207D150F007D62B6 /* Assets.xcassets */; };
@@ -17,7 +17,7 @@
 		6284A542207D150F007D62B6 /* ZQAVPlayerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A541207D150F007D62B6 /* ZQAVPlayerTests.m */; };
 		6284A54D207D150F007D62B6 /* ZQAVPlayerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A54C207D150F007D62B6 /* ZQAVPlayerUITests.m */; };
 		6284A55C207D1628007D62B6 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6284A55B207D1628007D62B6 /* AVFoundation.framework */; };
-		62B9C3982085DE40005B1A94 /* ZYPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62B9C3972085DE40005B1A94 /* ZYPlayerController.m */; };
+		62B9C3982085DE40005B1A94 /* ZQPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62B9C3972085DE40005B1A94 /* ZQPlayerController.m */; };
 		676BF49CAF2DBC659A5159D7 /* libPods-ZQAVPlayerUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A70B96930472F1189DE70FCD /* libPods-ZQAVPlayerUITests.a */; };
 		865D9E955DA2050DC25A6112 /* libPods-ZQAVPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE008F0A871FE96C3D1762D0 /* libPods-ZQAVPlayer.a */; };
 		FDAA3D54970561A2DE30BEEF /* libPods-ZQAVPlayerTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC22991BFCD97BC6B6ACAE69 /* libPods-ZQAVPlayerTests.a */; };
@@ -45,10 +45,9 @@
 		62510A47207DB6860009CE2B /* ZFPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ZFPlayer.bundle; sourceTree = "<group>"; };
 		62510A58207DBDE90009CE2B /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		62510A59207E4A560009CE2B /* help.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = help.zip; sourceTree = "<group>"; };
-		6279DE71207F458000F80FD9 /* ZYPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYPlayerView.h; sourceTree = "<group>"; };
-		6279DE72207F458000F80FD9 /* ZYPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYPlayerView.m; sourceTree = "<group>"; };
-		6279DE73207F458000F80FD9 /* ZYSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZYSliderView.m; sourceTree = "<group>"; };
-		6279DE74207F458100F80FD9 /* ZYSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZYSliderView.h; sourceTree = "<group>"; };
+		6279DE71207F458000F80FD9 /* ZQPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZQPlayerView.h; sourceTree = "<group>"; };
+		6279DE72207F458000F80FD9 /* ZQPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZQPlayerView.m; sourceTree = "<group>"; };
+		6279DE73207F458000F80FD9 /* ZQSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZQSliderView.m; sourceTree = "<group>"; };
 		6279DE77207F459A00F80FD9 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		6279DE78207F459A00F80FD9 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		6284A525207D150E007D62B6 /* ZQAVPlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZQAVPlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -64,8 +63,9 @@
 		6284A54C207D150F007D62B6 /* ZQAVPlayerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZQAVPlayerUITests.m; sourceTree = "<group>"; };
 		6284A54E207D150F007D62B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6284A55B207D1628007D62B6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		62B9C3962085DE40005B1A94 /* ZYPlayerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZYPlayerController.h; sourceTree = "<group>"; };
-		62B9C3972085DE40005B1A94 /* ZYPlayerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZYPlayerController.m; sourceTree = "<group>"; };
+		62B9C3962085DE40005B1A94 /* ZQPlayerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZQPlayerController.h; sourceTree = "<group>"; };
+		62B9C3972085DE40005B1A94 /* ZQPlayerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZQPlayerController.m; sourceTree = "<group>"; };
+		62B9C39A2085E6A8005B1A94 /* ZQSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZQSliderView.h; sourceTree = "<group>"; };
 		7386A343F26913CBA21AEC84 /* Pods-ZQAVPlayerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZQAVPlayerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZQAVPlayerTests/Pods-ZQAVPlayerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		98069F10D73E1095CEA12FE3 /* Pods-ZQAVPlayerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZQAVPlayerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZQAVPlayerTests/Pods-ZQAVPlayerTests.release.xcconfig"; sourceTree = "<group>"; };
 		A2B8DEE391C954EC5AF4DA99 /* Pods-ZQAVPlayerUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZQAVPlayerUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZQAVPlayerUITests/Pods-ZQAVPlayerUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -157,12 +157,12 @@
 		62510A53207DBCEE0009CE2B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				6279DE71207F458000F80FD9 /* ZYPlayerView.h */,
-				6279DE72207F458000F80FD9 /* ZYPlayerView.m */,
-				6279DE74207F458100F80FD9 /* ZYSliderView.h */,
-				6279DE73207F458000F80FD9 /* ZYSliderView.m */,
-				62B9C3962085DE40005B1A94 /* ZYPlayerController.h */,
-				62B9C3972085DE40005B1A94 /* ZYPlayerController.m */,
+				6279DE71207F458000F80FD9 /* ZQPlayerView.h */,
+				6279DE72207F458000F80FD9 /* ZQPlayerView.m */,
+				62B9C39A2085E6A8005B1A94 /* ZQSliderView.h */,
+				6279DE73207F458000F80FD9 /* ZQSliderView.m */,
+				62B9C3962085DE40005B1A94 /* ZQPlayerController.h */,
+				62B9C3972085DE40005B1A94 /* ZQPlayerController.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -542,11 +542,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6279DE79207F459B00F80FD9 /* ViewController.m in Sources */,
-				6279DE75207F458100F80FD9 /* ZYPlayerView.m in Sources */,
+				6279DE75207F458100F80FD9 /* ZQPlayerView.m in Sources */,
 				6284A538207D150F007D62B6 /* main.m in Sources */,
-				62B9C3982085DE40005B1A94 /* ZYPlayerController.m in Sources */,
+				62B9C3982085DE40005B1A94 /* ZQPlayerController.m in Sources */,
 				6284A52A207D150E007D62B6 /* AppDelegate.m in Sources */,
-				6279DE76207F458100F80FD9 /* ZYSliderView.m in Sources */,
+				6279DE76207F458100F80FD9 /* ZQSliderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
