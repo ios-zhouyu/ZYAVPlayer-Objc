@@ -10,6 +10,7 @@
 #import "Masonry.h"
 #import <AVFoundation/AVFoundation.h>
 #import "ZQSliderView.h"
+#import "ZQPlayerLoadingView.h"
 
 typedef NS_ENUM(NSInteger, ZQAVPlayerPlayStatus) {
     ZQAVPlayerPlayStatusUnknown = 0,//默认未知
@@ -45,13 +46,18 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
 @property (nonatomic, strong) AVPlayerItem *playerItem;//播放单元
 @property (nonatomic, strong) AVPlayerLayer *playerLayer;//播放界面（layer）
 @property (nonatomic, strong)  AVURLAsset *urlAsset;//播放集合
-@property (nonatomic, strong) AVAssetImageGenerator *assetImageGenerator;//预览图
+@property (nonatomic, strong) AVAssetImageGenerator *assetImageGenerator;//预览图管理
+@property (nonatomic, strong) UIImageView *preViewImageView;//预览图
 
 @property (nonatomic, assign, getter=isTouchedHidenSubviews) BOOL touchedHidenSubviews;//是否点击了屏幕,隐藏和显示按钮
 @property (nonatomic, assign) ZQAVPlayerPlayStatus playStatus;//播放状态
 @property (nonatomic, strong) id playerTimeObserve;//监听时时播放时间
 @property (nonatomic, assign) NSInteger currentTimeNum;//当前播放的秒数,方便切换屏幕继续播放
 @property (nonatomic, assign, getter=isSliderDragging) BOOL sliderDragging;//是否在拖拽小圆点
+
+@property (nonatomic, strong) ZQPlayerLoadingView *loadingView;//网络缓冲等待
+@property (nonatomic, strong) UIButton *playWrongButton;//视频加载失败
+@property (nonatomic, copy) NSString *currentURLString;//当前视频连接
 @end
 
 @implementation ZQPlayerView
@@ -70,12 +76,18 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         [self addSubview:self.lockButton];
         [self addSubview:self.playButton];
         [self addSubview:self.fullScreenButton];
+        [self addSubview:self.playWrongButton];
         
         [self addSubview:self.titleLabel];
         [self addSubview:self.currentTimeLabel];
         [self addSubview:self.totalTimeLabel];
         
         [self addSubview:self.sliderView];
+        [self addSubview:self.preViewImageView];
+        [self addSubview:self.loadingView];
+        
+        [self sendSubviewToBack:self.loadingView];
+        [self sendSubviewToBack:self.preViewImageView];
         
         [self palyerViewLayeroutSubView];
         
@@ -89,8 +101,14 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
 }
 
 #pragma mark - setter
+- (void)setPreViewImageNameString:(NSString *)preViewImageNameString {
+    _preViewImageNameString = preViewImageNameString;
+    self.preViewImageView.image = [UIImage imageNamed:preViewImageNameString];
+}
+
 - (void)setUrlString:(NSString *)urlString {
     _urlString = urlString;
+    self.currentURLString = urlString;
     // 将网址进行 UTF8 转码，避免有些汉字会变乱码
     NSURL *URL = [NSURL URLWithString:[urlString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     self.urlAsset = [AVURLAsset URLAssetWithURL:URL options:@{@"AVURLAssetPreferPreciseDurationAndTimingKey":@(YES)}];
@@ -100,6 +118,9 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     self.playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
     self.playerLayer.frame = self.bounds;
     [self.layer insertSublayer:self.playerLayer atIndex:0];
+    
+    //设置预览图
+    self.preViewImageView.image = [self preViewImageWithAVURLAsset:self.urlAsset atTime:6];
     
     // 监听播放状态
     [self.playerItem addObserver:self forKeyPath:ZYAVPlayerStatus options:NSKeyValueObservingOptionNew context:nil];
@@ -121,22 +142,22 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     [notificationCenter addObserver:self selector:@selector(playerPlayToBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
-//获取预览图
-- (UIImage*) thumbnailImageWithAVURLAsset:(AVURLAsset *)urlAsset atTime:(NSTimeInterval)time {
+//获取指定时间的预览图
+- (UIImage*)preViewImageWithAVURLAsset:(AVURLAsset *)urlAsset atTime:(NSTimeInterval)time {
     self.assetImageGenerator = [[AVAssetImageGenerator alloc] initWithAsset:urlAsset];
     self.assetImageGenerator.appliesPreferredTrackTransform = YES;
     self.assetImageGenerator.apertureMode = AVAssetImageGeneratorApertureModeEncodedPixels;
     
-    CGImageRef thumbnailImageRef = NULL;
-    CFTimeInterval thumbnailImageTime = time;
-    NSError *thumbnailImageGenerationError = nil;
-    thumbnailImageRef = [self.assetImageGenerator copyCGImageAtTime:CMTimeMake(thumbnailImageTime, 60)actualTime:NULL error:&thumbnailImageGenerationError];
+    CGImageRef preViewImageRef = NULL;
+    NSError *error = nil;
+    preViewImageRef = [self.assetImageGenerator copyCGImageAtTime:CMTimeMake(time, 1)actualTime:NULL error:&error];
     
-    if(!thumbnailImageRef) {
-        NSLog(@"thumbnailImageGenerationError %@",thumbnailImageGenerationError);
+    if(!preViewImageRef || error) {//未解析到图片
+        return nil;
+    } else {//拿到预览图后隐藏loading图
+        self.loadingView.hidden = YES;
+        return [[UIImage alloc] initWithCGImage: preViewImageRef];
     }
-    UIImage*thumbnailImage = thumbnailImageRef ? [[UIImage alloc]initWithCGImage: thumbnailImageRef] : nil;
-    return thumbnailImage;
 }
 
 #pragma mark - NSNotificationCenter
@@ -164,9 +185,13 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         [self detalPlayerItemLoadedTimeRanges];
     } else if (object == self.playerItem && [keyPath isEqualToString:ZYAVPlayerPlaybackBufferEmpty]) {// 监听播放器在缓冲数据的状态,VPlayer 缓存不足就会自动暂停
         self.playStatus = ZQAVPlayerPlayStatusPause;
+        self.loadingView.hidden = NO;//缓冲的时候加载loading图
     } else if (object == self.playerItem && [keyPath isEqualToString:ZYAVPlayerPlaybackLikelyToKeepUp]) {// AVPlayer 缓存不足就会自动暂停，所以缓存充足了需要手动播放，才能继续播放
-        [self.player play];
-        self.playStatus = ZQAVPlayerPlayStatusPlay;
+        self.loadingView.hidden = YES;//缓冲完成时关闭
+        if (self.playButton.selected) {//防止首次进来时自动播放
+            [self.player play];
+            self.playStatus = ZQAVPlayerPlayStatusPlay;
+        }
     }
 }
 - (void)detalPlayerItemLoadedTimeRanges {
@@ -182,10 +207,9 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
 }
 - (void)detalPlayerItemStatus {
     if (self.playerItem.status == AVPlayerItemStatusReadyToPlay) {//将要播放--此方法只会在最开始播放时走一次
-        self.playButton.selected = YES;
-        [self.player play];
-        self.playStatus = ZQAVPlayerPlayStatusPlay;
+        self.playStatus = ZQAVPlayerPlayStatusPreparePlay;
         self.sliderView.userInteractionEnabled = YES;
+        self.playWrongButton.hidden = YES;
         
         // 获取总时长
         double totalTimeSecond = (double)self.urlAsset.duration.value / (double)self.urlAsset.duration.timescale;
@@ -198,12 +222,16 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         
     } else if (self.playerItem.status == AVPlayerItemStatusFailed) {//播放失败
         self.playStatus = ZQAVPlayerPlayStatusFailed;
+        self.playWrongButton.hidden = NO;
+        self.loadingView.hidden = YES;
         [self.player pause];
         self.sliderView.userInteractionEnabled = NO;
     } else if (self.playerItem.status == AVPlayerItemStatusUnknown) {//未知错误
         self.playStatus = ZQAVPlayerPlayStatusUnknown;
+        self.playWrongButton.hidden = NO;
         [self.player pause];
         self.sliderView.userInteractionEnabled = NO;
+        self.loadingView.hidden = YES;
     }
 }
 
@@ -268,6 +296,7 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     self.sliderDragging = YES;
     
     if (sliderPoint.y < -20 ||  sliderPoint.y > sliderHeight + 20) {//限制滑动的范围
+        self.loadingView.hidden = NO;
         [self.sliderView.sliderCircleView removeGestureRecognizer:panGesture];//先删除手势在添加
         //调到对应播放时间播放
         [self.player seekToTime:CMTimeMake(currentTimeSecond, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
@@ -277,13 +306,15 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         self.sliderView.sliderCurrentWidth = currentTimeSecond / totalTimeSecond * (sliderWidth - 15);
         [self.sliderView.sliderCircleView addGestureRecognizer:self.sliderView.panGesture];
         
-        if (self.playStatus == ZQAVPlayerPlayStatusPause || self.playStatus == ZQAVPlayerPlayStatusEnd) {
+        if (self.playStatus == ZQAVPlayerPlayStatusPreparePlay || self.playStatus == ZQAVPlayerPlayStatusPause || self.playStatus == ZQAVPlayerPlayStatusEnd) {
             [self.player play];
+            [self.preViewImageView removeFromSuperview];
             self.playButton.selected = YES;
             self.playStatus = ZQAVPlayerPlayStatusPlay;
         }
         //延迟1.0秒监听当前播放时长,否则slider会出现突变现象
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.loadingView.hidden = YES;
             self.sliderDragging = NO;
         });
         return;
@@ -295,14 +326,17 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         self.currentTimeLabel.text = [NSString stringWithFormat:@"%02d:%02d",(int)currentMinute,(int)currentSecond];
         self.sliderView.sliderCurrentWidth = currentTimeSecond / totalTimeSecond * (sliderWidth - 15);
     } else if (panGesture.state == UIGestureRecognizerStateEnded) {//拖拽结束再播放,在监听播放当前播放时长
+        self.loadingView.hidden = NO;
         [self.player seekToTime:CMTimeMake(currentTimeSecond, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
-        if (self.playStatus == ZQAVPlayerPlayStatusPause || self.playStatus == ZQAVPlayerPlayStatusEnd) {
+        if (self.playStatus == ZQAVPlayerPlayStatusPreparePlay || self.playStatus == ZQAVPlayerPlayStatusPause || self.playStatus == ZQAVPlayerPlayStatusEnd) {
             [self.player play];
+            [self.preViewImageView removeFromSuperview];
             self.playButton.selected = YES;
             self.playStatus = ZQAVPlayerPlayStatusPlay;
         }
         //延迟0.5秒监听当前播放时长,否则slider会出现突变现象
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.loadingView.hidden = YES;
             self.sliderDragging = NO;
         });
     } else {
@@ -335,8 +369,9 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
 - (void)playButtonClick:(UIButton *)button {//播放/暂停
     button.selected = !button.selected;
     if (button.isSelected) {
+        [self.preViewImageView removeFromSuperview];//开始播放删除预览图
         if (self.playStatus == ZQAVPlayerPlayStatusEnd) {//播放结束后又重新点击播放
-            [self.player seekToTime:CMTimeMake(1, 1) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
+            [self.player seekToTime:CMTimeMake(1, 5) toleranceBefore:kCMTimeZero toleranceAfter:kCMTimeZero];
         }
         [self.player play];
         self.playStatus = ZQAVPlayerPlayStatusPlay;
@@ -352,12 +387,21 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     }
 }
 - (void)doubleTap:(UITapGestureRecognizer *)doubleTapGesture {//双击隐藏所有子控件
-    if (self.lockButton.selected || self.playStatus == ZQAVPlayerPlayStatusEnd) {
+    if (self.lockButton.selected || self.playStatus == ZQAVPlayerPlayStatusEnd || [doubleTapGesture.view isMemberOfClass:[self class]]) {
         return;
     }
     self.touchedHidenSubviews = !self.touchedHidenSubviews;
     self.lockButton.hidden = self.touchedHidenSubviews;
     [self setSubviewsHiddenWithStatus:self.touchedHidenSubviews];
+}
+- (void)tryPlayAgain {
+    self.loadingView.hidden = NO;
+    if (self.playStatus != ZQAVPlayerPlayStatusPlay || self.playStatus != ZQAVPlayerPlayStatusPreparePlay) {
+        self.urlString = self.currentURLString;
+    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.loadingView.hidden = YES;
+    });
 }
 //隐藏所有按钮
 - (void)setSubviewsHiddenWithStatus:(BOOL)status {
@@ -425,9 +469,35 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
         make.centerY.mas_equalTo(self.playButton.mas_centerY);
         make.height.mas_equalTo(40);
     }];
+    
+    [self.preViewImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.mas_equalTo(self);
+    }];
+    
+    [self.loadingView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.left.right.mas_equalTo(self);
+    }];
+    
+    [self.playWrongButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.center.mas_equalTo(self);
+    }];
 }
 
 #pragma mark - getter
+- (ZQPlayerLoadingView *)loadingView {
+    if (!_loadingView) {
+        _loadingView = [[ZQPlayerLoadingView alloc] init];
+        _loadingView.hidden = NO;
+    }
+    return _loadingView;
+}
+- (UIImageView *)preViewImageView {
+    if (!_preViewImageView) {
+        _preViewImageView = [[UIImageView alloc] initWithFrame:self.bounds];
+        _preViewImageView.image = [UIImage imageNamed:@"ZFPlayer.bundle/ZFPlayer_loading_bgView"];
+    }
+    return _preViewImageView;
+}
 - (ZQSliderView *)sliderView {
     if (!_sliderView) {
         _sliderView = [[ZQSliderView alloc] init];
@@ -515,5 +585,20 @@ static NSString * ZYAVPlayerPlaybackLikelyToKeepUp = @"playbackLikelyToKeepUp";/
     }
     return _fullScreenButton;
 }
-
+- (UIButton *)playWrongButton {
+    if (!_playWrongButton) {
+        _playWrongButton = [[UIButton alloc] init];
+        [_playWrongButton setTitle:@"  播放失败,点我重试  " forState:UIControlStateNormal];
+        [_playWrongButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_playWrongButton setTitle:@"  播放失败,点我重试  " forState:UIControlStateNormal];
+        [_playWrongButton setTitleColor:[UIColor grayColor] forState:UIControlStateHighlighted];
+        _playWrongButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
+        _playWrongButton.hidden = YES;
+        _playWrongButton.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+        _playWrongButton.layer.cornerRadius = 3;
+        _playWrongButton.layer.masksToBounds = YES;
+        [_playWrongButton addTarget:self action:@selector(tryPlayAgain) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _playWrongButton;
+}
 @end

@@ -16,7 +16,7 @@
 
 @interface ZQPlayerView : UIView
 @property (nonatomic, copy) NSString *urlString;//视频连接...
-
+@property (nonatomic, copy) NSString *preViewImageNameString;//设置默认预览图
 @property (nonatomic, weak) id<ZQPlayerViewDelegate> delegate;
 
 @end

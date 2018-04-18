@@ -37,7 +37,9 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    NSString *urlString = @"http://static.smartisanos.cn/common/video/proud-farmer.mp4";
+    //http://img.aifootball365.cn/appbi/tmp/video/mpeg2_av3.vob
+    //http://bos.nj.bpc.baidu.com/tieba-smallvideo/11772_3c435014fb2dd9a5fd56a57cc369f6a0.mp4
+    NSString *urlString = @"http://bos.nj.bpc.baidu.com/tieba-smallvideo/11772_3c435014fb2dd9a5fd56a57cc369f6a0.mp4";
     self.playerView.urlString = urlString;
 }
 

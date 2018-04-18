@@ -17,6 +17,7 @@
 		6284A542207D150F007D62B6 /* ZQAVPlayerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A541207D150F007D62B6 /* ZQAVPlayerTests.m */; };
 		6284A54D207D150F007D62B6 /* ZQAVPlayerUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6284A54C207D150F007D62B6 /* ZQAVPlayerUITests.m */; };
 		6284A55C207D1628007D62B6 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6284A55B207D1628007D62B6 /* AVFoundation.framework */; };
+		628C455F2086F55F00883C36 /* ZQPlayerLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 628C455E2086F55F00883C36 /* ZQPlayerLoadingView.m */; };
 		62B9C3982085DE40005B1A94 /* ZQPlayerController.m in Sources */ = {isa = PBXBuildFile; fileRef = 62B9C3972085DE40005B1A94 /* ZQPlayerController.m */; };
 		676BF49CAF2DBC659A5159D7 /* libPods-ZQAVPlayerUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A70B96930472F1189DE70FCD /* libPods-ZQAVPlayerUITests.a */; };
 		865D9E955DA2050DC25A6112 /* libPods-ZQAVPlayer.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DE008F0A871FE96C3D1762D0 /* libPods-ZQAVPlayer.a */; };
@@ -63,6 +64,8 @@
 		6284A54C207D150F007D62B6 /* ZQAVPlayerUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZQAVPlayerUITests.m; sourceTree = "<group>"; };
 		6284A54E207D150F007D62B6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6284A55B207D1628007D62B6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		628C455D2086F55F00883C36 /* ZQPlayerLoadingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZQPlayerLoadingView.h; sourceTree = "<group>"; };
+		628C455E2086F55F00883C36 /* ZQPlayerLoadingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZQPlayerLoadingView.m; sourceTree = "<group>"; };
 		62B9C3962085DE40005B1A94 /* ZQPlayerController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZQPlayerController.h; sourceTree = "<group>"; };
 		62B9C3972085DE40005B1A94 /* ZQPlayerController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZQPlayerController.m; sourceTree = "<group>"; };
 		62B9C39A2085E6A8005B1A94 /* ZQSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZQSliderView.h; sourceTree = "<group>"; };
@@ -159,6 +162,8 @@
 			children = (
 				6279DE71207F458000F80FD9 /* ZQPlayerView.h */,
 				6279DE72207F458000F80FD9 /* ZQPlayerView.m */,
+				628C455D2086F55F00883C36 /* ZQPlayerLoadingView.h */,
+				628C455E2086F55F00883C36 /* ZQPlayerLoadingView.m */,
 				62B9C39A2085E6A8005B1A94 /* ZQSliderView.h */,
 				6279DE73207F458000F80FD9 /* ZQSliderView.m */,
 				62B9C3962085DE40005B1A94 /* ZQPlayerController.h */,
@@ -544,6 +549,7 @@
 				6279DE79207F459B00F80FD9 /* ViewController.m in Sources */,
 				6279DE75207F458100F80FD9 /* ZQPlayerView.m in Sources */,
 				6284A538207D150F007D62B6 /* main.m in Sources */,
+				628C455F2086F55F00883C36 /* ZQPlayerLoadingView.m in Sources */,
 				62B9C3982085DE40005B1A94 /* ZQPlayerController.m in Sources */,
 				6284A52A207D150E007D62B6 /* AppDelegate.m in Sources */,
 				6279DE76207F458100F80FD9 /* ZQSliderView.m in Sources */,
